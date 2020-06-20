@@ -1,0 +1,654 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.19.2 by Michael Rose
+  Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Floating Point Error Example - website.</title>
+<meta name="description" content="Last post, we talked about how to understand floating point error, but the only example we consider was the trivial case of a + b + c. In this post, we will consider the example of summing the reciprocal squares of the natural numbers up to n. ">
+
+
+  <meta name="author" content="Nate Armstrong">
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="website.">
+<meta property="og:title" content="Floating Point Error Example">
+<meta property="og:url" content="http://localhost:4000/floating-point-error-example/">
+
+
+  <meta property="og:description" content="Last post, we talked about how to understand floating point error, but the only example we consider was the trivial case of a + b + c. In this post, we will consider the example of summing the reciprocal squares of the natural numbers up to n. ">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2020-05-31T00:00:00-07:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="http://localhost:4000/floating-point-error-example/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "Nate Armstrong",
+      "url": "http://localhost:4000/"
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="website. Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<!-- Include Favicon -->
+<link rel="shortcut icon" type="image/png" href="favicon.png">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          website.
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/blog/">Blog</a>
+            </li><li class="masthead__menu-item">
+              <a href="/resume/">Resume</a>
+            </li></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Nate Armstrong</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>UC Berkeley senior in Engineering Math and Statistics. Rock climber.</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Berkeley, CA</span>
+        </li>
+      
+
+      
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+            <li><a href="https://github.com/naterarmstrong" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+        
+      
+
+      
+
+      
+        <li>
+          <a href="mailto:narmstrong@berkeley.edu">
+            <meta itemprop="email" content="narmstrong@berkeley.edu" />
+            <i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span>
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Floating Point Error Example">
+    <meta itemprop="description" content="Last post, we talked about how to understand floating point error, but the only example we consider was the trivial case of a + b + c. In this post, we will consider the example of summing the reciprocal squares of the natural numbers up to n.">
+    <meta itemprop="datePublished" content="2020-05-31T00:00:00-07:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">Floating Point Error Example
+</h1>
+          
+            <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  6 minute read
+
+</p>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+
+
+	<script type="text/x-mathjax-config">
+	  MathJax.Hub.Config({
+	    extensions: [
+	      "MathMenu.js",
+	      "MathZoom.js",
+	      "AssistiveMML.js",
+	      "a11y/accessibility-menu.js"
+	    ],
+	    jax: ["input/TeX", "output/CommonHTML"],
+	    TeX: {
+	      extensions: [
+	        "AMSmath.js",
+	        "AMSsymbols.js",
+	        "noErrors.js",
+	        "noUndefined.js",
+	      ]
+	    }
+	  });
+	</script>
+	<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+        <p>Last post, we talked about how to understand floating point error, but the only example we consider was the trivial case of \(a + b + c\). 
+In this post, we will consider the example of summing the reciprocal squares of the natural numbers up to \(n\),</p>
+
+\[s_n = \sum_{k=1}^n \frac{1}{k^2_{}},\]
+
+<p>in two different manners, and see how the error bounds we arrive at are different.
+Most importantly, we will see how different the possible precision is.</p>
+
+<p>We start by writing out the sum as</p>
+
+\[1 + \frac{1}{2^2} + \frac{1}{3^3} + \dots + \frac{1}{(n-1)^2} + \frac{1}{n^2}.\]
+
+<p>The two methods of summation we will consider is summing up the numbers from left to right, and then from right to left.</p>
+
+<h3 id="true-truncation-error">True Truncation Error</h3>
+
+<p>Finding the limit of this summation is known as the <em>Basel problem</em> and was first solved by Euler when he was a young mathematician.
+The solution to the infinite sum is exactly \(\frac{\pi^2}{6}\).
+However, we are not interested here in how to compute this.
+If you are interested in seeing some proofs, I recommend the stackexchange post <a href="https://math.stackexchange.com/questions/8337/different-methods-to-compute-sum-limits-k-1-infty-frac1k2-basel-pro">here</a>.</p>
+
+<p>We are also interested in the analytical error created by stopping out summation early at \(n\) instead of \(\infty\).
+This error is exactly</p>
+
+\[\sum_{k=n + 1}^\infty \frac{1}{k^2_{}},\]
+
+<p>which we can bound by the integral of the same monotonically decreasing function starting at \(n\), which gives us</p>
+
+\[\sum_{k=n + 1}^\infty \frac{1}{k^2_{}} \leq \int_n^\infty \frac{1}{k^2} \, dk = \frac{1}{n}.\]
+
+<p>Now, we know the analytical error of cutting off the sum early.
+This will be useful later in calculating how close we can come to the true limit of \(\frac{\pi^2}{6}\) by increasing \(n\).
+After a certain point, the increase in floating point error will counteract the change in analytical error.
+That will be our limit of accuracy, and increasing \(n\) will not let our calculation get any more accurate.</p>
+
+<h1 id="error-analysis">Error Analysis</h1>
+
+<p>Note: These sections will be very mathy, and if you are just interested in the difference in result and possible accuracy achieved, you can skip to the end where I will list the results.</p>
+
+<p>We will denote the \(k\)th term of the summation (in either direction) as \(a_k\).
+We will denote the \(n\)th partial sum as \(s_n\).
+We will number the \(\delta\)’s which appear as either being attached to the term \(a_k\) (for the reciprocal inverse operation) or as being attached to the partial sum \(s_n\).
+Then, our partial sums \(\hat{s_n}\) have the recursive formula</p>
+
+\[\hat{s_n} = (\hat{s}_{n-1} + a_n(1 + \delta_{a1}))(1 + \delta_{s_n})\]
+
+<p>with the base case</p>
+
+\[\hat{s_2} = (a_1(1 + \delta_{a1}) + a_2(1 + \delta_{a2}))(1 + \delta_{s2}).\]
+
+<p>We are then going to solve for the absolute error, the term</p>
+
+\[| \hat{s_n} - s_n |\]
+
+<p>We subtract out the \(a_i\)s in the true sum, and also ignore terms which multiply together \(\delta\)s.
+Thus, combining terms for each \(a_i\), we get</p>
+
+\[a_1(1 + n\delta_{a1}) + a_2(1 + n\delta_{a2}) + a_3(1 + (n-1)\delta_{a3}) + \dots + a_n(1 + \delta_{an}).\]
+
+<p>In order to make this easier to work with, we will add an additional \(a_1\delta_{a1}\) to the error, which gives us the nice summation</p>
+
+\[\sum_{k=1}^n a_k(n + 2 - k)\delta_{ak}.\]
+
+<p>Now, we can use this summation to bound the error in each of the two different cases.</p>
+
+<h2 id="left-to-right-analysis">Left to Right Analysis</h2>
+
+<p>In this case, we have terms</p>
+
+\[a_k = \frac{1}{k^2}\]
+
+<p>which substitutes into the absolute error summation as</p>
+
+\[\sum_{k=1}^n \frac{1}{k^2}(n + 2 - k) \delta_{ak}.\]
+
+<p>We already know that every \(\delta\) is, by definition, of absolute value less than \(\frac{\epsilon}{2}\).
+Thus, we substitute that into the summation to get that</p>
+
+\[| \hat{s_n} - s_n | \leq \sum_{k=1}^n \frac{\epsilon}{2} \frac{n + 2 - k}{k^2} \leq \frac{\epsilon(n + 2)}{2} \sum_{k=1}^n \frac{1}{k^2}.\]
+
+<p>Above, we also removed the \(-k\) term, as we are trying to upper bound the error, and get a sufficient bound without it.
+We can then use the limit of the sequence \(s_n\) to state that the sum term is upper bounded by \(\pi / 6 \leq 2\).
+This gives us an error bound of</p>
+
+\[| \hat{s_n} - s_n | \leq (n + 2) \epsilon.\]
+
+<h2 id="right-to-left-analysis">Right to Left Analysis</h2>
+
+<p>When summing from right to left, the \(k\)th term is</p>
+
+\[a_k = \frac{1}{(n + 1 - k)^2}.\]
+
+<p>which gives us an absolute error summation of</p>
+
+\[\sum_{k=1}^n \frac{n + 2 - k}{(n + 1 - k)^2} \delta_{ak}\]
+
+<p>which we split into two different sums to make the numerator and denominator cancel.
+We then see that the right side is the same sum as \(s_n\), and as such can be bounded by \(2 \frac{\epsilon}{2} = \epsilon\).</p>
+
+\[\sum_{k=1}^n \frac{\delta_{ak}}{n + 1 - k} + \sum_{k=1}^n \frac{\delta_{ak}}{(n + 1 - k)^2} \leq \sum_{k=3}^{n+2} \frac{\delta_{ak}}{k} + \epsilon.\]
+
+<p>We then use the \(\frac{\epsilon}{2}\) bound on the sum of \(\delta\)’s.
+Then, we have the harmonic series starting at 3.
+The first term is always 1, so we can state that</p>
+
+\[1 + \sum_{k=3}^n \frac{1}{k} \leq \sum_{k=1}^n \frac{1}{k}\]
+
+<p>We can then use a known bound of the harmonic series up to \(k\) terms,</p>
+
+\[\sum_{k=1}^n \frac{1}{k} \leq 1 + \ln_{} n\]
+
+<p>which lets us state that our sum starting at three is bounded by</p>
+
+\[\sum_{k=3}^n \frac{1}{k} \leq \ln n.\]
+
+<p>Putting it all together, we get an error bound of</p>
+
+\[| \hat{s_n} - s_n| \leq \frac{\epsilon}{2}(2 + \ln n).\]
+
+<h2 id="comparison-and-meaning">Comparison and Meaning</h2>
+
+<p>We now have an error bound for each summing method, listed below.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Method</th>
+      <th>Error Bound</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Left to Right</td>
+      <td>\(\leq (n + 2) \epsilon\)</td>
+    </tr>
+    <tr>
+      <td>Right to Left</td>
+      <td>\(\leq \frac{(2 + \ln n)\epsilon}{2}\)</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Clearly, the order of growth of the error is hugely different.
+One is linear, and the other is logarithmic in the number of terms.
+It’s crazy to see this difference in error bounds on a simple summation, with such simple methods each way.</p>
+
+<p>Now that we see the difference in error bound, how does this affect how close this method can get to estimating the true limit of \(\pi^2 / 6\)?
+Clearly, neither can approximate it perfectly. However, how close does each get? And how many terms does it take?</p>
+
+<p>The way to solve this is to write an expression for our <em>total error</em>, in this case the total error is the sum of the floating point error and truncation error. Then, we will minimize this expression.</p>
+
+\[\text{Total Error} = \text{ Truncation Error } + \text{ Floating Point Error}.\]
+
+<p>In both cases, the truncation error is just \(\frac{1}{n}\), as we proved above.</p>
+
+<h3 id="left-to-right">Left to Right</h3>
+
+<p>The total error is</p>
+
+\[\frac{1}{n} + (n + 2)\epsilon.\]
+
+<p>We take the derivative with respect to \(n\), and set it equal to 0.</p>
+
+\[-\frac{1}{n^2} + \epsilon = 0 \implies n = \frac{1}{\sqrt{\epsilon}}\]
+
+<p>which will give us a maximum precision of</p>
+
+\[\sqrt{\epsilon} + 2\epsilon + \frac{1}{\sqrt{2\epsilon}} \approx 2^{25}\epsilon.\]
+
+<h3 id="right-to-left">Right to Left</h3>
+
+<p>The total error is</p>
+
+\[\frac{1}{n} + \epsilon + \frac{\ln n}{2}\epsilon.\]
+
+<p>We take the derivative, and set it equal to 0.</p>
+
+\[-\frac{1}{n^2} + \frac{\epsilon}{2n} = 0 \implies n = \frac{2}{\epsilon}\]
+
+<p>which gives us a maximum precision of</p>
+
+\[\frac{3\epsilon}{2} + \frac{\ln \frac{2}{\epsilon}}{2}\epsilon \approx 19\epsilon\]
+
+<h3 id="the-difference">The Difference</h3>
+
+<p>We see that in this case, the best accuracy achievable differs by more than 6 orders of magnitude, or \(2^{21}\).
+This is an absolutely massive difference.
+Of course, to achieve this level of accuracy, we have to run the program for similarly absurd numbers of iterations.
+For the left to right case, we need to sum about 67 million terms before our accuracy stops increasing (albeit slower than the right to left case).
+For the right to left, we get increasing accuracy all the way up to about 1 quadrillion terms.
+We will never want to evaluate this sum that far out, but it is a useful example to showcase the difference in error that we can get just by changing the order in which we do a simple sum.</p>
+
+<p>Overall, floating point error is generally very small, and usually negligible, relative to the size of your problem or the tolerance of a solution.
+However, it’s worth knowing how it works, what can help to make it less pronounced, and general floating point best practices.
+Of course, you can always just use 128-bit if you are concerned it will be an issue, and then your (floating point) errors will almost disappear.</p>
+
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+        
+          <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-05-31T00:00:00-07:00">May 31, 2020</time></p>
+        
+      </footer>
+
+      <section class="page__share">
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Floating+Point+Error+Example%20http%3A%2F%2Flocalhost%3A4000%2Ffloating-point-error-example%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Ffloating-point-error-example%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Ffloating-point-error-example%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/understanding-floating-point-error/" class="pagination--pager" title="Understanding Floating Point Error
+">Previous</a>
+    
+    
+      <a href="#" class="pagination--pager disabled">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You May Also Enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/understanding-floating-point-error/" rel="permalink">Understanding Floating Point Error
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  9 minute read
+
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Floating point is the most commonly used number format for calculations.
+However, most people don’t know how error is created and propagated in floating poin...</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2020 Nate Armstrong. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+  <script src="https://kit.fontawesome.com/4eee35f757.js"></script>
+
+
+
+
+
+
+
+
+
+
+  </body>
+</html>

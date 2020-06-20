@@ -9,8 +9,8 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>Nate Armstrong's Website</title>
-<meta name="description" content="An amazing website. ">
+<!-- begin _includes/seo.html --><title>website.</title>
+<meta name="description" content="A place to put thoughts on math, statistics, and computer science. ">
 
 
   <meta name="author" content="Nate Armstrong">
@@ -18,12 +18,12 @@
 
 <meta property="og:type" content="website">
 <meta property="og:locale" content="en_US">
-<meta property="og:site_name" content="Nate Armstrong's Website">
-<meta property="og:title" content="Nate Armstrong’s Website">
+<meta property="og:site_name" content="website.">
+<meta property="og:title" content="website.">
 <meta property="og:url" content="http://localhost:4000/">
 
 
-  <meta property="og:description" content="An amazing website. ">
+  <meta property="og:description" content="A place to put thoughts on math, statistics, and computer science. ">
 
 
 
@@ -64,7 +64,7 @@
 <!-- end _includes/seo.html -->
 
 
-<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Nate Armstrong's Website Feed">
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="website. Feed">
 
 <!-- https://t.co/dKP3o1e -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -75,6 +75,9 @@
 
 <!-- For all browsers -->
 <link rel="stylesheet" href="/assets/css/main.css">
+
+<!-- Include Favicon -->
+<link rel="shortcut icon" type="image/png" href="favicon.png">
 
 <!--[if IE]>
   <style>
@@ -123,10 +126,14 @@
       <nav id="site-nav" class="greedy-nav">
         
         <a class="site-title" href="/">
-          Nate Armstrong's Website
+          website.
           
         </a>
-        <ul class="visible-links"></ul>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/blog/">Blog</a>
+            </li><li class="masthead__menu-item">
+              <a href="/resume/">Resume</a>
+            </li></ul>
         
         <button class="greedy-nav__toggle hidden" type="button">
           <span class="visually-hidden">Toggle menu</span>
@@ -160,7 +167,7 @@
     
     
       <div class="author__bio" itemprop="description">
-        <p>I am an <strong>amazing</strong> person.</p>
+        <p>UC Berkeley senior in Engineering Math and Statistics. Rock climber.</p>
 
       </div>
     
@@ -171,7 +178,7 @@
     <ul class="author__urls social-icons">
       
         <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
-          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Somewhere</span>
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Berkeley, CA</span>
         </li>
       
 
@@ -186,6 +193,8 @@
           
         
           
+            <li><a href="https://github.com/naterarmstrong" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
         
           
         
@@ -193,6 +202,13 @@
 
       
 
+      
+        <li>
+          <a href="mailto:narmstrong@berkeley.edu">
+            <meta itemprop="email" content="narmstrong@berkeley.edu" />
+            <i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span>
+          </a>
+        </li>
       
 
       
@@ -275,7 +291,7 @@
     
     <h2 class="archive__item-title" itemprop="headline">
       
-        <a href="/jekyll/update/welcome-to-jekyll/" rel="permalink">Welcome to Jekyll!
+        <a href="/floating-point-error-example/" rel="permalink">Floating Point Error Example
 </a>
       
     </h2>
@@ -285,11 +301,40 @@
 
 
 
-  less than 1 minute read
+  6 minute read
 
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">You’ll find this post in your _posts directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different wa...</p>
+    <p class="archive__item-excerpt" itemprop="description">Last post, we talked about how to understand floating point error, but the only example we consider was the trivial case of a + b + c. In this post, we will ...</p>
+  </article>
+</div>
+
+
+  
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/understanding-floating-point-error/" rel="permalink">Understanding Floating Point Error
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  9 minute read
+
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Floating point is the most commonly used number format for calculations.
+However, most people don’t know how error is created and propagated in floating poin...</p>
   </article>
 </div>
 
