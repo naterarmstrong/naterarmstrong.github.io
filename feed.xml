@@ -1,453 +1,567 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-06-19T21:48:08-07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">website.</title><subtitle>A place to put thoughts on math, statistics, and computer science.</subtitle><author><name>Nate Armstrong</name><email>narmstrong@berkeley.edu</email></author><entry><title type="html">Floating Point Error Example</title><link href="http://localhost:4000/floating-point-error-example/" rel="alternate" type="text/html" title="Floating Point Error Example" /><published>2020-05-31T00:00:00-07:00</published><updated>2020-05-31T00:00:00-07:00</updated><id>http://localhost:4000/floating-point-error-example</id><content type="html" xml:base="http://localhost:4000/floating-point-error-example/">&lt;p&gt;Last post, we talked about how to understand floating point error, but the only example we consider was the trivial case of \(a + b + c\). 
-In this post, we will consider the example of summing the reciprocal squares of the natural numbers up to \(n\),&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2023-08-01T17:06:52-07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">website.</title><subtitle>A place to put thoughts on math, statistics, and computer science.</subtitle><author><name>Nate Armstrong</name><email>narmstrong@berkeley.edu</email></author><entry><title type="html">Guess the Largest Number Paradox</title><link href="http://localhost:4000/pick-the-largest-number/" rel="alternate" type="text/html" title="Guess the Largest Number Paradox" /><published>2023-07-31T01:00:00-07:00</published><updated>2023-07-31T01:00:00-07:00</updated><id>http://localhost:4000/pick-the-largest-number</id><content type="html" xml:base="http://localhost:4000/pick-the-largest-number/"><![CDATA[<p>Many statistical paradoxes boil down to an imprecise problem statement, but this is one paradox that is truly astonishing, where we seem to get information from absolutely nothing.</p>
+
+<h2 id="the-problem">The Problem</h2>
+
+<p>Consider a simple game. There are two pieces of face-down paper on the table, and there is a number written on each. You don’t know anything about the numbers. You flip over one of the pieces of paper at random, and read the number on it. Now, you need to decide if you think this is the larger of the two numbers. What do you do?</p>
+
+<p>Intuitively, there is no better solution that guessing randomly, and you cannot guess which number is bigger more than 50% of the time.
+You have no information about the other number, so you might as well guess randomly.</p>
+
+<h2 id="the-solution">The Solution</h2>
+
+<p>However, this is not actually the best that you can do.
+There is a way to guess correctly <em>strictly</em> more than 50% of the time, formalized by Thomas Cover in 1987 in only a single paragraph.<a href="https://isl.stanford.edu/~cover/papers/paper73.pdf">1</a></p>
+
+<p>Pick a “splitting number” \(T\) at random according to a normal distribution. When you reveal the number \(X\), compare \(T\) and \(X\).
+If \(X &gt;= T\), guess that \(X\) is the larger number.
+If \(X &lt; T\), guess that \(X\) is the smaller number.</p>
+
+<h3 id="why-does-it-work">Why does it work?</h3>
+
+<p>This solution works because <em>you always answer correctly</em> when \(T\) is between the two numbers, and answer correctly 50% of the time otherwise.
+It’s easiest to see this visually.</p>
+
+<p>Let’s call the smaller of the two numbers \(A\), and the larger of the two numbers \(B\). Alone, that looks like this:</p>
+
+<p><img src="/assets/img/pick-the-largest-number/ab-alone.png" alt="A then B" /></p>
+
+<p>Now, we create our random guess \(T\). We first investigate the easy options, where \(T\) is smaller than both numbers or larger than both numbers.</p>
+
+<p><img src="/assets/img/pick-the-largest-number/tab-order.png" alt="T, then A, then B" /></p>
+
+<p>In this case, we always guess that the number revealed is the larger of the two, based on our strategy from before.
+We will be correct if \(B\) is chosen, and wrong if \(A\) is chosen.
+Because we choose between \(A\) and \(B\) randomly, we will pick \(B\) 50% of the time, and thus will guess correctly 50% of the time.</p>
+
+<p><img src="/assets/img/pick-the-largest-number/abt-order.png" alt="A, then B, then T" /></p>
+
+<p>In this case, we always guess that the number revealed is the smaller of the two, based on our strategy from before.
+We will be correct if \(A\) is chosen, and wrong if \(B\) is chosen.
+Similarly to before, we will pick \(A\) 50% of the time, and thus will guess correctly 50% of the time.</p>
+
+<p><img src="/assets/img/pick-the-largest-number/atb-orange.png" alt="A, then T, then B" /></p>
+
+<p>If $T$ is between $A$ and $B$, our guess depends on <em>which</em> of \(A\) and \(B\) is chosen.</p>
+
+<p><img src="/assets/img/pick-the-largest-number/atb-a-transparent.png" alt="ATB A Transparent" /></p>
+
+<p>If \(B\) is chosen, we will correctly say that \(B\) is the larger of the two.</p>
+
+<p><img src="/assets/img/pick-the-largest-number/atb-b-transparent.png" alt="ATB B Transparent" /></p>
+
+<p>Similarly, If \(A\) is chosen, we will correctly say that \(A\) is the smaller of the two.
+If $T$ is between $A$ and $B$, we always answer correctly.</p>
+
+<p>We can summarize our results like the below.</p>
+
+<p><img src="/assets/img/pick-the-largest-number/ab-explanation.png" alt="explanation" /></p>
+
+<h2 id="analysis">Analysis</h2>
+
+<p>How likely is it that we guess correctly?
+We can summarize it into the formula below by splitting into three cases based on how \(T\) compares to \(A\) and \(B\).</p>
+
+\[\begin{align}
+P(\text{correct}) &amp;= \frac{P(T \leq A)}{2} + P(A &lt; T \leq B) + \frac{P(T &gt; B)}{2} \\
+&amp;= \frac{P(T \leq A) + P(T &gt; B)}{2} + P(A &lt; T \leq B) \\
+&amp;= \frac{1 - P(A &lt; T \leq B)}{2} + P(A &lt; T \leq B) \\
+&amp;= \frac{1}{2} + \frac{P(A &lt; T \leq B)}{2}
+\end{align}\]
+
+<p>Now, all we need to do is figure out how likely we are to have \(T\) between \(A\) and \(B\).
+Because we picked out \(T\) from a normal distribution, we can directly solve for this probability.
+With a little inspection, we can see that this probability is <em>strictly</em> greater than 0 for all positive numbers, and as such the odds that \(T\) is between \(A\) and \(B\) is also strictly positive.</p>
+
+\[P(A &lt; T \leq B) = \int_A^B \frac{1}{\sqrt{2\pi}} e^{-\frac{x^2}{2}} dx\]
+
+<p>Thus, our final equation for the probability we guess correctly is</p>
+
+\[P(\text{correct}) = \frac{1}{2} + \int_A^B \frac{1}{\sqrt{8\pi}} e^{-\frac{x^2}{2}} dx\]
+
+<p>We can evaluate this for some different values of \(A\) and \(B\) to investigate how this behaves.</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>A: 0  B: 1
+   Probability: 0.6707
+A: 0  B: 10
+   Probability: 0.75
+A: 5  B: 10
+   Probability: 0.50000014
+A: 7  B: 10
+   Probability: 0.500000000001
+</code></pre></div></div>
+
+<p>It’s clear that the probability goes down when \(A\) and \(B\) are closer to each other, and also goes down when \(A\) and \(B\) are farther from 1.
+In fact, by the time \(A\) and \(B\) are both greater than 10, the difference from 0.5 is below the precision of most software.
+However, it always positive.</p>
+
+<p>This is the real caveat to the strong statement of “strictly greater than .5”. Although the probability of guessing correctly is better than one half, it is not <em>uniformly</em> greater than one half. Unless we assume some prior distribution of \(A\) and \(B\), this strategy is basically exactly as effective as randomly guessing.</p>
+
+<p>More precisely, as long as you know nothing about \(A\) and \(B\), you cannot ever get measurably far from a probability of one half. For any \(\epsilon &gt; 0\), you can never achieve a probability of guessing correctly that is at least \(\frac{1}{2} + \epsilon\).</p>
+
+<p>Even further, if we <em>do</em> know something about the distribution of \(A\) and \(B\), this is <em>still</em> not the best strategy. If we know that \(A\) and \(B\) come independently from some distribution \(F\), we should still use a “splitting number” strategy, but our splitting point \(T\) should be exactly the median of the distribution \(F\).</p>
+
+<p>This lines up with intuition about this type of problem. If you know that \(A\) and \(B\) are drawn uniformly from the range \([0, 10]\), we guess that numbers less than 5 are the smaller of the two, and numbers greater than 5 are the greater of the two.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>In summary, although this paradox is incredibly surprising, it does not ultimately subvert our understanding of the wordl.
+It seems like we get <em>information</em>, out of nothing, but it turns out that the advantage gained is so small as to be negligible.</p>
+
+<p>For further reading on this topic, you can consider looking at <a href="https://www.quantamagazine.org/solution-information-from-randomness-20150722/">this Quanta article</a> on the same topic.</p>]]></content><author><name>Nate Armstrong</name><email>narmstrong@berkeley.edu</email></author><category term="Statistics" /><summary type="html"><![CDATA[Many statistical paradoxes boil down to an imprecise problem statement, but this is one paradox that is truly astonishing, where we seem to get information from absolutely nothing.]]></summary></entry><entry><title type="html">Floating Point Error Example</title><link href="http://localhost:4000/floating-point-error-example/" rel="alternate" type="text/html" title="Floating Point Error Example" /><published>2020-05-31T00:00:00-07:00</published><updated>2020-05-31T00:00:00-07:00</updated><id>http://localhost:4000/floating-point-error-example</id><content type="html" xml:base="http://localhost:4000/floating-point-error-example/"><![CDATA[<p>Last post, we talked about how to understand floating point error, but the only example we consider was the trivial case of \(a + b + c\).
+In this post, we will consider the example of summing the reciprocal squares of the natural numbers up to \(n\),</p>
 
 \[s_n = \sum_{k=1}^n \frac{1}{k^2_{}},\]
 
-&lt;p&gt;in two different manners, and see how the error bounds we arrive at are different.
-Most importantly, we will see how different the possible precision is.&lt;/p&gt;
+<p>in two different manners, and see how the error bounds we arrive at are different.
+Most importantly, we will see how different the possible precision is.</p>
 
-&lt;p&gt;We start by writing out the sum as&lt;/p&gt;
+<p>We start by writing out the sum as</p>
 
 \[1 + \frac{1}{2^2} + \frac{1}{3^3} + \dots + \frac{1}{(n-1)^2} + \frac{1}{n^2}.\]
 
-&lt;p&gt;The two methods of summation we will consider is summing up the numbers from left to right, and then from right to left.&lt;/p&gt;
+<p>The two methods of summation we will consider is summing up the numbers from left to right, and then from right to left.</p>
 
-&lt;h3 id=&quot;true-truncation-error&quot;&gt;True Truncation Error&lt;/h3&gt;
+<h3 id="true-truncation-error">True Truncation Error</h3>
 
-&lt;p&gt;Finding the limit of this summation is known as the &lt;em&gt;Basel problem&lt;/em&gt; and was first solved by Euler when he was a young mathematician.
+<p>Finding the limit of this summation is known as the <em>Basel problem</em> and was first solved by Euler when he was a young mathematician.
 The solution to the infinite sum is exactly \(\frac{\pi^2}{6}\).
 However, we are not interested here in how to compute this.
-If you are interested in seeing some proofs, I recommend the stackexchange post &lt;a href=&quot;https://math.stackexchange.com/questions/8337/different-methods-to-compute-sum-limits-k-1-infty-frac1k2-basel-pro&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+If you are interested in seeing some proofs, I recommend the stackexchange post <a href="https://math.stackexchange.com/questions/8337/different-methods-to-compute-sum-limits-k-1-infty-frac1k2-basel-pro">here</a>.</p>
 
-&lt;p&gt;We are also interested in the analytical error created by stopping out summation early at \(n\) instead of \(\infty\).
-This error is exactly&lt;/p&gt;
+<p>We are also interested in the analytical error created by stopping out summation early at \(n\) instead of \(\infty\).
+This error is exactly</p>
 
 \[\sum_{k=n + 1}^\infty \frac{1}{k^2_{}},\]
 
-&lt;p&gt;which we can bound by the integral of the same monotonically decreasing function starting at \(n\), which gives us&lt;/p&gt;
+<p>which we can bound by the integral of the same monotonically decreasing function starting at \(n\), which gives us</p>
 
 \[\sum_{k=n + 1}^\infty \frac{1}{k^2_{}} \leq \int_n^\infty \frac{1}{k^2} \, dk = \frac{1}{n}.\]
 
-&lt;p&gt;Now, we know the analytical error of cutting off the sum early.
+<p>Now, we know the analytical error of cutting off the sum early.
 This will be useful later in calculating how close we can come to the true limit of \(\frac{\pi^2}{6}\) by increasing \(n\).
 After a certain point, the increase in floating point error will counteract the change in analytical error.
-That will be our limit of accuracy, and increasing \(n\) will not let our calculation get any more accurate.&lt;/p&gt;
+That will be our limit of accuracy, and increasing \(n\) will not let our calculation get any more accurate.</p>
 
-&lt;h1 id=&quot;error-analysis&quot;&gt;Error Analysis&lt;/h1&gt;
+<h1 id="error-analysis">Error Analysis</h1>
 
-&lt;p&gt;Note: These sections will be very mathy, and if you are just interested in the difference in result and possible accuracy achieved, you can skip to the end where I will list the results.&lt;/p&gt;
+<p>Note: These sections will be very mathy, and if you are just interested in the difference in result and possible accuracy achieved, you can skip to the end where I will list the results.</p>
 
-&lt;p&gt;We will denote the \(k\)th term of the summation (in either direction) as \(a_k\).
+<p>We will denote the \(k\)th term of the summation (in either direction) as \(a_k\).
 We will denote the \(n\)th partial sum as \(s_n\).
 We will number the \(\delta\)’s which appear as either being attached to the term \(a_k\) (for the reciprocal inverse operation) or as being attached to the partial sum \(s_n\).
-Then, our partial sums \(\hat{s_n}\) have the recursive formula&lt;/p&gt;
+Then, our partial sums \(\hat{s_n}\) have the recursive formula</p>
 
-\[\hat{s_n} = (\hat{s}_{n-1} + a_n(1 + \delta_{a1}))(1 + \delta_{s_n})\]
+\[\hat{s_n} = (\hat{s}*{n-1} + a_n(1 + \delta*{a1}))(1 + \delta_{s_n})\]
 
-&lt;p&gt;with the base case&lt;/p&gt;
+<p>with the base case</p>
 
 \[\hat{s_2} = (a_1(1 + \delta_{a1}) + a_2(1 + \delta_{a2}))(1 + \delta_{s2}).\]
 
-&lt;p&gt;We are then going to solve for the absolute error, the term&lt;/p&gt;
+<p>We are then going to solve for the absolute error, the term</p>
 
 \[| \hat{s_n} - s_n |\]
 
-&lt;p&gt;We subtract out the \(a_i\)s in the true sum, and also ignore terms which multiply together \(\delta\)s.
-Thus, combining terms for each \(a_i\), we get&lt;/p&gt;
+<p>We subtract out the \(a_i\)s in the true sum, and also ignore terms which multiply together \(\delta\)s.
+Thus, combining terms for each \(a_i\), we get</p>
 
 \[a_1(1 + n\delta_{a1}) + a_2(1 + n\delta_{a2}) + a_3(1 + (n-1)\delta_{a3}) + \dots + a_n(1 + \delta_{an}).\]
 
-&lt;p&gt;In order to make this easier to work with, we will add an additional \(a_1\delta_{a1}\) to the error, which gives us the nice summation&lt;/p&gt;
+<p>In order to make this easier to work with, we will add an additional \(a_1\delta_{a1}\) to the error, which gives us the nice summation</p>
 
 \[\sum_{k=1}^n a_k(n + 2 - k)\delta_{ak}.\]
 
-&lt;p&gt;Now, we can use this summation to bound the error in each of the two different cases.&lt;/p&gt;
+<p>Now, we can use this summation to bound the error in each of the two different cases.</p>
 
-&lt;h2 id=&quot;left-to-right-analysis&quot;&gt;Left to Right Analysis&lt;/h2&gt;
+<h2 id="left-to-right-analysis">Left to Right Analysis</h2>
 
-&lt;p&gt;In this case, we have terms&lt;/p&gt;
+<p>In this case, we have terms</p>
 
 \[a_k = \frac{1}{k^2}\]
 
-&lt;p&gt;which substitutes into the absolute error summation as&lt;/p&gt;
+<p>which substitutes into the absolute error summation as</p>
 
 \[\sum_{k=1}^n \frac{1}{k^2}(n + 2 - k) \delta_{ak}.\]
 
-&lt;p&gt;We already know that every \(\delta\) is, by definition, of absolute value less than \(\frac{\epsilon}{2}\).
-Thus, we substitute that into the summation to get that&lt;/p&gt;
+<p>We already know that every \(\delta\) is, by definition, of absolute value less than \(\frac{\epsilon}{2}\).
+Thus, we substitute that into the summation to get that</p>
 
 \[| \hat{s_n} - s_n | \leq \sum_{k=1}^n \frac{\epsilon}{2} \frac{n + 2 - k}{k^2} \leq \frac{\epsilon(n + 2)}{2} \sum_{k=1}^n \frac{1}{k^2}.\]
 
-&lt;p&gt;Above, we also removed the \(-k\) term, as we are trying to upper bound the error, and get a sufficient bound without it.
+<p>Above, we also removed the \(-k\) term, as we are trying to upper bound the error, and get a sufficient bound without it.
 We can then use the limit of the sequence \(s_n\) to state that the sum term is upper bounded by \(\pi / 6 \leq 2\).
-This gives us an error bound of&lt;/p&gt;
+This gives us an error bound of</p>
 
 \[| \hat{s_n} - s_n | \leq (n + 2) \epsilon.\]
 
-&lt;h2 id=&quot;right-to-left-analysis&quot;&gt;Right to Left Analysis&lt;/h2&gt;
+<h2 id="right-to-left-analysis">Right to Left Analysis</h2>
 
-&lt;p&gt;When summing from right to left, the \(k\)th term is&lt;/p&gt;
+<p>When summing from right to left, the \(k\)th term is</p>
 
 \[a_k = \frac{1}{(n + 1 - k)^2}.\]
 
-&lt;p&gt;which gives us an absolute error summation of&lt;/p&gt;
+<p>which gives us an absolute error summation of</p>
 
 \[\sum_{k=1}^n \frac{n + 2 - k}{(n + 1 - k)^2} \delta_{ak}\]
 
-&lt;p&gt;which we split into two different sums to make the numerator and denominator cancel.
-We then see that the right side is the same sum as \(s_n\), and as such can be bounded by \(2 \frac{\epsilon}{2} = \epsilon\).&lt;/p&gt;
+<p>which we split into two different sums to make the numerator and denominator cancel.
+We then see that the right side is the same sum as \(s_n\), and as such can be bounded by \(2 \frac{\epsilon}{2} = \epsilon\).</p>
 
 \[\sum_{k=1}^n \frac{\delta_{ak}}{n + 1 - k} + \sum_{k=1}^n \frac{\delta_{ak}}{(n + 1 - k)^2} \leq \sum_{k=3}^{n+2} \frac{\delta_{ak}}{k} + \epsilon.\]
 
-&lt;p&gt;We then use the \(\frac{\epsilon}{2}\) bound on the sum of \(\delta\)’s.
+<p>We then use the \(\frac{\epsilon}{2}\) bound on the sum of \(\delta\)’s.
 Then, we have the harmonic series starting at 3.
-The first term is always 1, so we can state that&lt;/p&gt;
+The first term is always 1, so we can state that</p>
 
 \[1 + \sum_{k=3}^n \frac{1}{k} \leq \sum_{k=1}^n \frac{1}{k}\]
 
-&lt;p&gt;We can then use a known bound of the harmonic series up to \(k\) terms,&lt;/p&gt;
+<p>We can then use a known bound of the harmonic series up to \(k\) terms,</p>
 
 \[\sum_{k=1}^n \frac{1}{k} \leq 1 + \ln_{} n\]
 
-&lt;p&gt;which lets us state that our sum starting at three is bounded by&lt;/p&gt;
+<p>which lets us state that our sum starting at three is bounded by</p>
 
 \[\sum_{k=3}^n \frac{1}{k} \leq \ln n.\]
 
-&lt;p&gt;Putting it all together, we get an error bound of&lt;/p&gt;
+<p>Putting it all together, we get an error bound of</p>
 
 \[| \hat{s_n} - s_n| \leq \frac{\epsilon}{2}(2 + \ln n).\]
 
-&lt;h2 id=&quot;comparison-and-meaning&quot;&gt;Comparison and Meaning&lt;/h2&gt;
+<h2 id="comparison-and-meaning">Comparison and Meaning</h2>
 
-&lt;p&gt;We now have an error bound for each summing method, listed below.&lt;/p&gt;
+<p>We now have an error bound for each summing method, listed below.</p>
 
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Method&lt;/th&gt;
-      &lt;th&gt;Error Bound&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Left to Right&lt;/td&gt;
-      &lt;td&gt;\(\leq (n + 2) \epsilon\)&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Right to Left&lt;/td&gt;
-      &lt;td&gt;\(\leq \frac{(2 + \ln n)\epsilon}{2}\)&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+<table>
+  <thead>
+    <tr>
+      <th>Method</th>
+      <th>Error Bound</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Left to Right</td>
+      <td>\(\leq (n + 2) \epsilon\)</td>
+    </tr>
+    <tr>
+      <td>Right to Left</td>
+      <td>\(\leq \frac{(2 + \ln n)\epsilon}{2}\)</td>
+    </tr>
+  </tbody>
+</table>
 
-&lt;p&gt;Clearly, the order of growth of the error is hugely different.
+<p>Clearly, the order of growth of the error is hugely different.
 One is linear, and the other is logarithmic in the number of terms.
-It’s crazy to see this difference in error bounds on a simple summation, with such simple methods each way.&lt;/p&gt;
+It’s crazy to see this difference in error bounds on a simple summation, with such simple methods each way.</p>
 
-&lt;p&gt;Now that we see the difference in error bound, how does this affect how close this method can get to estimating the true limit of \(\pi^2 / 6\)?
-Clearly, neither can approximate it perfectly. However, how close does each get? And how many terms does it take?&lt;/p&gt;
+<p>Now that we see the difference in error bound, how does this affect how close this method can get to estimating the true limit of \(\pi^2 / 6\)?
+Clearly, neither can approximate it perfectly. However, how close does each get? And how many terms does it take?</p>
 
-&lt;p&gt;The way to solve this is to write an expression for our &lt;em&gt;total error&lt;/em&gt;, in this case the total error is the sum of the floating point error and truncation error. Then, we will minimize this expression.&lt;/p&gt;
+<p>The way to solve this is to write an expression for our <em>total error</em>, in this case the total error is the sum of the floating point error and truncation error. Then, we will minimize this expression.</p>
 
 \[\text{Total Error} = \text{ Truncation Error } + \text{ Floating Point Error}.\]
 
-&lt;p&gt;In both cases, the truncation error is just \(\frac{1}{n}\), as we proved above.&lt;/p&gt;
+<p>In both cases, the truncation error is just \(\frac{1}{n}\), as we proved above.</p>
 
-&lt;h3 id=&quot;left-to-right&quot;&gt;Left to Right&lt;/h3&gt;
+<h3 id="left-to-right">Left to Right</h3>
 
-&lt;p&gt;The total error is&lt;/p&gt;
+<p>The total error is</p>
 
 \[\frac{1}{n} + (n + 2)\epsilon.\]
 
-&lt;p&gt;We take the derivative with respect to \(n\), and set it equal to 0.&lt;/p&gt;
+<p>We take the derivative with respect to \(n\), and set it equal to 0.</p>
 
 \[-\frac{1}{n^2} + \epsilon = 0 \implies n = \frac{1}{\sqrt{\epsilon}}\]
 
-&lt;p&gt;which will give us a maximum precision of&lt;/p&gt;
+<p>which will give us a maximum precision of</p>
 
 \[\sqrt{\epsilon} + 2\epsilon + \frac{1}{\sqrt{2\epsilon}} \approx 2^{25}\epsilon.\]
 
-&lt;h3 id=&quot;right-to-left&quot;&gt;Right to Left&lt;/h3&gt;
+<h3 id="right-to-left">Right to Left</h3>
 
-&lt;p&gt;The total error is&lt;/p&gt;
+<p>The total error is</p>
 
 \[\frac{1}{n} + \epsilon + \frac{\ln n}{2}\epsilon.\]
 
-&lt;p&gt;We take the derivative, and set it equal to 0.&lt;/p&gt;
+<p>We take the derivative, and set it equal to 0.</p>
 
 \[-\frac{1}{n^2} + \frac{\epsilon}{2n} = 0 \implies n = \frac{2}{\epsilon}\]
 
-&lt;p&gt;which gives us a maximum precision of&lt;/p&gt;
+<p>which gives us a maximum precision of</p>
 
 \[\frac{3\epsilon}{2} + \frac{\ln \frac{2}{\epsilon}}{2}\epsilon \approx 19\epsilon\]
 
-&lt;h3 id=&quot;the-difference&quot;&gt;The Difference&lt;/h3&gt;
+<h3 id="the-difference">The Difference</h3>
 
-&lt;p&gt;We see that in this case, the best accuracy achievable differs by more than 6 orders of magnitude, or \(2^{21}\).
+<p>We see that in this case, the best accuracy achievable differs by more than 6 orders of magnitude, or \(2^{21}\).
 This is an absolutely massive difference.
 Of course, to achieve this level of accuracy, we have to run the program for similarly absurd numbers of iterations.
 For the left to right case, we need to sum about 67 million terms before our accuracy stops increasing (albeit slower than the right to left case).
 For the right to left, we get increasing accuracy all the way up to about 1 quadrillion terms.
-We will never want to evaluate this sum that far out, but it is a useful example to showcase the difference in error that we can get just by changing the order in which we do a simple sum.&lt;/p&gt;
+We will never want to evaluate this sum that far out, but it is a useful example to showcase the difference in error that we can get just by changing the order in which we do a simple sum.</p>
 
-&lt;p&gt;Overall, floating point error is generally very small, and usually negligible, relative to the size of your problem or the tolerance of a solution.
+<p>Overall, floating point error is generally very small, and usually negligible, relative to the size of your problem or the tolerance of a solution.
 However, it’s worth knowing how it works, what can help to make it less pronounced, and general floating point best practices.
-Of course, you can always just use 128-bit if you are concerned it will be an issue, and then your (floating point) errors will almost disappear.&lt;/p&gt;</content><author><name>Nate Armstrong</name><email>narmstrong@berkeley.edu</email></author><summary type="html">Last post, we talked about how to understand floating point error, but the only example we consider was the trivial case of a + b + c. In this post, we will consider the example of summing the reciprocal squares of the natural numbers up to n.</summary></entry><entry><title type="html">Understanding Floating Point Error</title><link href="http://localhost:4000/understanding-floating-point-error/" rel="alternate" type="text/html" title="Understanding Floating Point Error" /><published>2020-05-28T04:00:00-07:00</published><updated>2020-05-28T04:00:00-07:00</updated><id>http://localhost:4000/understanding-floating-point-error</id><content type="html" xml:base="http://localhost:4000/understanding-floating-point-error/">&lt;p&gt;Floating point is the most commonly used number format for calculations.
+Of course, you can always just use 128-bit if you are concerned it will be an issue, and then your (floating point) errors will almost disappear.</p>]]></content><author><name>Nate Armstrong</name><email>narmstrong@berkeley.edu</email></author><category term="Math" /><category term="Computer Science" /><summary type="html"><![CDATA[Last post, we talked about how to understand floating point error, but the only example we consider was the trivial case of a + b + c. In this post, we will consider the example of summing the reciprocal squares of the natural numbers up to n.]]></summary></entry><entry><title type="html">Understanding Floating Point Error</title><link href="http://localhost:4000/understanding-floating-point-error/" rel="alternate" type="text/html" title="Understanding Floating Point Error" /><published>2020-05-28T04:00:00-07:00</published><updated>2020-05-28T04:00:00-07:00</updated><id>http://localhost:4000/understanding-floating-point-error</id><content type="html" xml:base="http://localhost:4000/understanding-floating-point-error/"><![CDATA[<p>Floating point is the most commonly used number format for calculations.
 However, most people don’t know how error is created and propagated in floating point calculations.
-In this post, I go over the basics of understanding floating point rounding and error bounds.&lt;/p&gt;
+In this post, I go over the basics of understanding floating point rounding and error bounds.</p>
 
-&lt;h2 id=&quot;floating-point&quot;&gt;Floating Point&lt;/h2&gt;
-&lt;p&gt;There are many explanations of floating point on the internet, and so I will not write a detailed explanation here.
+<h2 id="floating-point">Floating Point</h2>
+
+<p>There are many explanations of floating point on the internet, and so I will not write a detailed explanation here.
 If you do not know what floating point is, I recommend reading the article here(TODO).
 For our purposes, we are interested in the IEEE 754 64 bit floating point representation.
 I ignore the sign bit, as it is not relevant to error calculations.
-Below, I list the breakdown of bits for these representations.&lt;/p&gt;
+Below, I list the breakdown of bits for these representations.</p>
 
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Mantissa Length&lt;/th&gt;
-      &lt;th&gt;Characteristic Length&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;52&lt;/td&gt;
-      &lt;td&gt;11&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+<table>
+  <thead>
+    <tr>
+      <th>Mantissa Length</th>
+      <th>Characteristic Length</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>52</td>
+      <td>11</td>
+    </tr>
+  </tbody>
+</table>
 
-&lt;p&gt;We denote the mantissa by \(m\) of length \(l_m\), the characteristic by \(c\) of length \(l_c\), and the sign bit as \(s\).
-The characteristic is &lt;em&gt;biased&lt;/em&gt;, which means that the true exponent is given by \(c - 2^{l_c - 1} + 1\), giving us \(2^{l_c - 1}\)
+<p>We denote the mantissa by \(m\) of length \(l_m\), the characteristic by \(c\) of length \(l_c\), and the sign bit as \(s\).
+The characteristic is <em>biased</em>, which means that the true exponent is given by \(c - 2^{l_c - 1} + 1\), giving us \(2^{l_c - 1}\)
 positive characteristics, and \(2^{l_c - 1} - 1\) negative characteristics.
-Any number with \(c \neq 0\) and \(m \neq 0\) will be represented as&lt;/p&gt;
+Any number with \(c \neq 0\) and \(m \neq 0\) will be represented as</p>
 
 \[(-1)^s \left(1 + \frac{m}{2^{-52}}\right) \cdot 2^{c - 1023}\]
 
-&lt;p&gt;For example, if we had the number 5.25, we can convert this to floating point.
+<p>For example, if we had the number 5.25, we can convert this to floating point.
 We first see that this number is between \(4=2^2\) and \(8 = 2^3\), and so \(c - 1023 = 2 \implies c = 1025\).
-Then, we see that&lt;/p&gt;
+Then, we see that</p>
 
 \[5.25 = 4 + 1 + .25 = 2^2 + 2^0 + 2^{-2}\]
 
-&lt;p&gt;which gives us the mantissa.&lt;/p&gt;
+<p>which gives us the mantissa.</p>
 
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Sign&lt;/th&gt;
-      &lt;th&gt;Mantissa&lt;/th&gt;
-      &lt;th&gt;Characteristic&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;1&lt;/td&gt;
-      &lt;td&gt;\(\underbrace{0101000\dots}_\text{5$2_{}$ digits}\)&lt;/td&gt;
-      &lt;td&gt;10000000001&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+<table>
+  <thead>
+    <tr>
+      <th>Sign</th>
+      <th>Mantissa</th>
+      <th>Characteristic</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>\(\underbrace{0101000\dots}_\text{5$2_{}$ digits}\)</td>
+      <td>10000000001</td>
+    </tr>
+  </tbody>
+</table>
 
-&lt;h3 id=&quot;machine-epsilon&quot;&gt;Machine Epsilon&lt;/h3&gt;
-&lt;p&gt;We all know that with only 64 bits to represent a number, we can only represent a finite amount of numbers.
+<h3 id="machine-epsilon">Machine Epsilon</h3>
+
+<p>We all know that with only 64 bits to represent a number, we can only represent a finite amount of numbers.
 In fact, it will certainly be at most \(2^{64}\) numbers.
-How far apart are these numbers with the floating point standard?&lt;/p&gt;
+How far apart are these numbers with the floating point standard?</p>
 
-&lt;p&gt;In fact, it depends on the characteristic of the floating point number.
+<p>In fact, it depends on the characteristic of the floating point number.
 For every exponent \(-1022 \leq k \leq 1022\), there are exactly \(2^{52}\) numbers between \(2^k\)  and \(2^{k+1}\), one for each possible mantissa.
-Note that we are ignoring the largest and smallest exponents here, as those correspond to special floating point numbers.&lt;/p&gt;
+Note that we are ignoring the largest and smallest exponents here, as those correspond to special floating point numbers.</p>
 
-&lt;p&gt;First, we will consider the numbers \(1 \leq x \leq 2\).
+<p>First, we will consider the numbers \(1 \leq x \leq 2\).
 The smallest number we can represent in this range is exactly 1, by letting the characteristic equal 1024 and the mantissa be 0.
 The next largest number we can represent in this range is \(1 + 2^{-52}\), by letting the characteristic equal 1024 and the mantissa be
 all 0s except for a 1 at the end.
 Thus, the difference between these numbers is \(\epsilon = 2^{-52}\). Clearly, successive numbers in this range differ by 1 in the mantissa, which is \(\epsilon\) on the real number line.
-We call \(\epsilon\) &lt;em&gt;machine epsilon&lt;/em&gt;, to refer to the smallest gap between numbers that the computer can represent in this number format.
-However, we have not yet understood if \(\epsilon\) is the smallest gap, or if it is relative to the number represented.&lt;/p&gt;
+We call \(\epsilon\) <em>machine epsilon</em>, to refer to the smallest gap between numbers that the computer can represent in this number format.
+However, we have not yet understood if \(\epsilon\) is the smallest gap, or if it is relative to the number represented.</p>
 
-&lt;p&gt;Then, we consider the numbers between 2 and 4. We still have a distance of 1 in the mantissa between successive numbers.
+<p>Then, we consider the numbers between 2 and 4. We still have a distance of 1 in the mantissa between successive numbers.
 However, now this corresponds to \(2^{-51}\), or \(2\epsilon\). Between 4 and 8, the distance is \(4\epsilon\).
 Between 1/2 and 1, the distance is only \(\epsilon / 2\)
 By now, the trend should be fairly clear. The distance between successive numbers is relative to the size of the number.
-More precisely, the distance from a number \(x\) to the next floating point number is exactly&lt;/p&gt;
+More precisely, the distance from a number \(x\) to the next floating point number is exactly</p>
 
 \[2^{\lfloor \log_2(x) \rfloor} \epsilon.\]
 
-&lt;h2 id=&quot;rounding-in-floating-point&quot;&gt;Rounding in Floating Point&lt;/h2&gt;
-&lt;p&gt;We need to introduce some new notation in order to differentiate between a number, \(x\), and its floating point representation,
+<h2 id="rounding-in-floating-point">Rounding in Floating Point</h2>
+
+<p>We need to introduce some new notation in order to differentiate between a number, \(x\), and its floating point representation,
 \(\textbf{fl}(x)\). The representation of a number \(x\) in floating point is just the rounded representation of it.
-We round just as we would with an ordinary number.&lt;sup id=&quot;fnref:1&quot; role=&quot;doc-noteref&quot;&gt;&lt;a href=&quot;#fn:1&quot; class=&quot;footnote&quot;&gt;1&lt;/a&gt;&lt;/sup&gt; The key point of floating point error is understanding the difference between
-\(x\) and \(\textbf{fl}(x)\), and how this difference propagates through floating point operations.&lt;/p&gt;
+We round just as we would with an ordinary number.<sup id="fnref:1" role="doc-noteref"><a href="#fn:1" class="footnote" rel="footnote">1</a></sup> The key point of floating point error is understanding the difference between
+\(x\) and \(\textbf{fl}(x)\), and how this difference propagates through floating point operations.</p>
 
-&lt;p&gt;For example, if we have \(x = 1 + \frac{\epsilon}{4}\), we round this to \(\textbf{fl}(x) = 1\).
-On the other hand, \(\textbf{fl}\left(1 + \frac{3\epsilon}{4}\right) = 1 + \epsilon\).&lt;/p&gt;
+<p>For example, if we have \(x = 1 + \frac{\epsilon}{4}\), we round this to \(\textbf{fl}(x) = 1\).
+On the other hand, \(\textbf{fl}\left(1 + \frac{3\epsilon}{4}\right) = 1 + \epsilon\).</p>
 
-&lt;h3 id=&quot;rounding-error-in-floating-point&quot;&gt;Rounding Error in Floating Point&lt;/h3&gt;
-&lt;p&gt;We know that rounding will introduce some error. We bring a range of numbers to another, simpler number.
-How do we quantify this?&lt;/p&gt;
+<h3 id="rounding-error-in-floating-point">Rounding Error in Floating Point</h3>
 
-&lt;p&gt;Let’s consider rounding \(x\) between 1 and 2. Then, the distance between consecutive floating point numbers is \(\epsilon\).
+<p>We know that rounding will introduce some error. We bring a range of numbers to another, simpler number.
+How do we quantify this?</p>
+
+<p>Let’s consider rounding \(x\) between 1 and 2. Then, the distance between consecutive floating point numbers is \(\epsilon\).
 At worst, a point \(x\) will be \(\frac{\epsilon}{2}\) from \(\textbf{fl}(x)\).
-Mathematically, this becomes&lt;/p&gt;
+Mathematically, this becomes</p>
 
 \[|x - \textbf{fl}(x)| \leq \frac{\epsilon}{2}\]
 
-&lt;p&gt;In fact, we can divide by  \(\mid x \mid\) on the left side, as we know that \(\mid x\mid\) is between 1 and 2.
-The resultant expression is true for all \(x\), as the floating point error scales with \(\mid x\mid\).&lt;sup id=&quot;fnref:2&quot; role=&quot;doc-noteref&quot;&gt;&lt;a href=&quot;#fn:2&quot; class=&quot;footnote&quot;&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+<p>In fact, we can divide by  \(\mid x \mid\) on the left side, as we know that \(\mid x\mid\) is between 1 and 2.
+The resultant expression is true for all \(x\), as the floating point error scales with \(\mid x\mid\).<sup id="fnref:2" role="doc-noteref"><a href="#fn:2" class="footnote" rel="footnote">2</a></sup></p>
 
 \[\frac{|x - \textbf{fl}(x)|}{|x|} \leq \frac{\epsilon}{2}\]
 
-&lt;p&gt;When we want to talk about the error and propagate it, we want a better solution than keeping an awful inequality for every single arithmetic operation.
+<p>When we want to talk about the error and propagate it, we want a better solution than keeping an awful inequality for every single arithmetic operation.
 Thus, we state that \(x - \textbf{fl}(x) = \delta x\) for some \(-\frac{\epsilon}{2} \leq \delta \leq \frac{\epsilon}{2}\).
 This can also be written as \(\textbf{fl}(x) = x(1 + \delta)\).
-Then, we have an exact expression for \(x\) that makes understanding and propagating these errors through complex floating point expressions and algorithms much more understandable and practical.&lt;/p&gt;
+Then, we have an exact expression for \(x\) that makes understanding and propagating these errors through complex floating point expressions and algorithms much more understandable and practical.</p>
 
-&lt;p&gt;Now that we understand how to quantify floating point error when rounding, we need to understand how to apply it to floating point operations.&lt;/p&gt;
+<p>Now that we understand how to quantify floating point error when rounding, we need to understand how to apply it to floating point operations.</p>
 
-&lt;h3 id=&quot;error-in-floating-point-operations&quot;&gt;Error in Floating Point Operations&lt;/h3&gt;
-&lt;p&gt;Most computers nowadays have dedicated circuits devoted to solving basic floating point operations.
+<h3 id="error-in-floating-point-operations">Error in Floating Point Operations</h3>
+
+<p>Most computers nowadays have dedicated circuits devoted to solving basic floating point operations.
 However, in order to understand the error of a floating point operation, we don’t need to understand how these circuits work.
 We treat the floating point operation as a black box,
-and assume that the result of a floating point operation is the &lt;em&gt;exact result correctly rounded&lt;/em&gt;.&lt;/p&gt;
+and assume that the result of a floating point operation is the <em>exact result correctly rounded</em>.</p>
 
-&lt;p&gt;To understand what this means, let’s assume that our number representation method can only handle integers, and we’ve implemented division as one of our operations.
-Clearly, the result of \(4 / 3\) is not going to be an integer, as it is 1.33. 
+<p>To understand what this means, let’s assume that our number representation method can only handle integers, and we’ve implemented division as one of our operations.
+Clearly, the result of \(4 / 3\) is not going to be an integer, as it is 1.33.
 Thus, we assume that our division operation will find the correct result (1.33) and then round it for a result of 1.
-We do this &lt;em&gt;even though we cannot represent 1.33 in this system&lt;/em&gt;.&lt;/p&gt;
+We do this <em>even though we cannot represent 1.33 in this system</em>.</p>
 
-&lt;h3 id=&quot;multiple-inputs&quot;&gt;Multiple Inputs&lt;/h3&gt;
+<h3 id="multiple-inputs">Multiple Inputs</h3>
 
-&lt;p&gt;Every basic arithmetic operation is considered to be done in a single floating point operation.
+<p>Every basic arithmetic operation is considered to be done in a single floating point operation.
 However, it is important to note that the floating point operations can only operate on two inputs at a time, and they are not associative.
 Thus, the mathematical expression \(a + b + c\) does not translate to a unique floating point representation.
-It could be either 
+It could be either
 \(\textbf{fl}(\textbf{fl}(a + b) + c)\)
-or 
+or
 \(\textbf{fl}(a + \textbf{fl}(b + c))\)
-.&lt;/p&gt;
+.</p>
 
-&lt;p&gt;When we look at the actual result of the two operations above, they are &lt;em&gt;not the same&lt;/em&gt;.
+<p>When we look at the actual result of the two operations above, they are <em>not the same</em>.
 Also, when we write out the error for multiple operations, we need to keep track of multiple \(\delta\)s, as defined above.
-Thus, we number them as we use them.&lt;/p&gt;
+Thus, we number them as we use them.</p>
 
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Representation&lt;/th&gt;
-      &lt;th&gt;Result after the first operation&lt;/th&gt;
-      &lt;th&gt;Final Result&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;\(\textbf{fl}(\textbf{fl}(a + b) + c)\)&lt;/td&gt;
-      &lt;td&gt;\(\textbf{fl}((a + b)(1 + \delta_1) + c)\)&lt;/td&gt;
-      &lt;td&gt;\(((a + b)(1 + \delta_1) + c)(1 + \delta_2)\)&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;\(\textbf{fl}(a + \textbf{fl}(b + c))\)&lt;/td&gt;
-      &lt;td&gt;\(\textbf{fl}(a + (b + c)(1 + \delta_3))\)&lt;/td&gt;
-      &lt;td&gt;\((a + (b + c)(1 + \delta_3))(1 + \delta_4)\)&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+<table>
+  <thead>
+    <tr>
+      <th>Representation</th>
+      <th>Result after the first operation</th>
+      <th>Final Result</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>\(\textbf{fl}(\textbf{fl}(a + b) + c)\)</td>
+      <td>\(\textbf{fl}((a + b)(1 + \delta_1) + c)\)</td>
+      <td>\(((a + b)(1 + \delta_1) + c)(1 + \delta_2)\)</td>
+    </tr>
+    <tr>
+      <td>\(\textbf{fl}(a + \textbf{fl}(b + c))\)</td>
+      <td>\(\textbf{fl}(a + (b + c)(1 + \delta_3))\)</td>
+      <td>\((a + (b + c)(1 + \delta_3))(1 + \delta_4)\)</td>
+    </tr>
+  </tbody>
+</table>
 
-&lt;p&gt;When we factor out the above expressions to isolate the \(a\)’s, \(b\)’s, and \(c\)’s, we get&lt;/p&gt;
+<p>When we factor out the above expressions to isolate the \(a\)’s, \(b\)’s, and \(c\)’s, we get</p>
 
 \[a(1 + \delta_1)(1 + \delta_2) + b(1 + \delta_1)(1 + \delta_2) + c(1 + \delta_2)\]
 
-&lt;p&gt;and&lt;/p&gt;
+<p>and</p>
 
 \[a(1 + \delta_4) + b(1 + \delta_3)(1 + \delta_4) + c(1 + \delta_3)(1 + \delta_4).\]
 
-&lt;p&gt;First, we simplify this by rewriting \(\delta_i + \delta_j\) as 2 multiplied by some other \(\delta\), equal to the average of the two.
-Then, we see that terms which are the multiples of two \(\delta\)s are at most absolute value \(\epsilon^2 / 4\), which is small enough to ignore. Thus, we get&lt;/p&gt;
+<p>First, we simplify this by rewriting \(\delta_i + \delta_j\) as 2 multiplied by some other \(\delta\), equal to the average of the two.
+Then, we see that terms which are the multiples of two \(\delta\)s are at most absolute value \(\epsilon^2 / 4\), which is small enough to ignore. Thus, we get</p>
 
 \[a(1 + 2\delta_5) + b(1 + 2\delta_5) + c(1 + \delta_2)\]
 
-&lt;p&gt;and&lt;/p&gt;
+<p>and</p>
 
 \[a(1 + \delta_4) + b(1 + 2\delta_6) + c(1 + 2\delta_6).\]
 
-&lt;p&gt;We can see that the possible error on each input scales linearly with the number of operations that it is in.
-We can also see that the possible error is different for each input. For example, if \(a = 2^{51}\), and \(b = c = 1\), the absolute error bounds would be&lt;/p&gt;
+<p>We can see that the possible error on each input scales linearly with the number of operations that it is in.
+We can also see that the possible error is different for each input. For example, if \(a = 2^{51}\), and \(b = c = 1\), the absolute error bounds would be</p>
 
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Expression&lt;/th&gt;
-      &lt;th style=&quot;text-align: center&quot;&gt;Error&lt;/th&gt;
-      &lt;th&gt;Absolute Error Bound&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;\(\textbf{fl}(\textbf{fl}(a + b) + c)\)&lt;/td&gt;
-      &lt;td style=&quot;text-align: center&quot;&gt;\(a(1 + 2\delta_5) + b(1 + 2\delta_5) + c(1 + \delta_2)\)&lt;/td&gt;
-      &lt;td&gt;\(2 + \frac{3\epsilon }{2}\)&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;\(\textbf{fl}(a + \textbf{fl}(b + c))\)&lt;/td&gt;
-      &lt;td style=&quot;text-align: center&quot;&gt;\(a(1 + \delta_4) + b(1 + 2\delta_6) + c(1 + 2\delta_6)\)&lt;/td&gt;
-      &lt;td&gt;\(1 + 2\epsilon\)&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+<table>
+  <thead>
+    <tr>
+      <th>Expression</th>
+      <th style="text-align: center">Error</th>
+      <th>Absolute Error Bound</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>\(\textbf{fl}(\textbf{fl}(a + b) + c)\)</td>
+      <td style="text-align: center">\(a(1 + 2\delta_5) + b(1 + 2\delta_5) + c(1 + \delta_2)\)</td>
+      <td>\(2 + \frac{3\epsilon }{2}\)</td>
+    </tr>
+    <tr>
+      <td>\(\textbf{fl}(a + \textbf{fl}(b + c))\)</td>
+      <td style="text-align: center">\(a(1 + \delta_4) + b(1 + 2\delta_6) + c(1 + 2\delta_6)\)</td>
+      <td>\(1 + 2\epsilon\)</td>
+    </tr>
+  </tbody>
+</table>
 
-&lt;p&gt;which are very different. The error in the same operation becomes very nearly doubled by the simple change in order of operations!
+<p>which are very different. The error in the same operation becomes very nearly doubled by the simple change in order of operations!
 Of course, this was an extreme example to demonstrate a point, but we will show something more realistic later in a later post.
-In general, we want the intermediate sums to be as small as possible. An easy heuristic for this is to add the smallest numbers first, and then the largest.&lt;/p&gt;
+In general, we want the intermediate sums to be as small as possible. An easy heuristic for this is to add the smallest numbers first, and then the largest.</p>
 
-&lt;p&gt;For the rest of the post, we assume that we did the calculation in the first way, \(((a + b) + c\).
-Next, we have to decide how we want to interpret this error.&lt;/p&gt;
+<p>For the rest of the post, we assume that we did the calculation in the first way, \(((a + b) + c\).
+Next, we have to decide how we want to interpret this error.</p>
 
-&lt;h3 id=&quot;forward-vs-backwards-error-analysis&quot;&gt;Forward vs Backwards Error Analysis&lt;/h3&gt;
+<h3 id="forward-vs-backwards-error-analysis">Forward vs Backwards Error Analysis</h3>
 
-&lt;p&gt;There are two distinct methods with which to calculate the error of an expression \(\textbf{fl}(f(a, b, c))\)&lt;/p&gt;
+<p>There are two distinct methods with which to calculate the error of an expression \(\textbf{fl}(f(a, b, c))\)</p>
 
-&lt;ol&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;Forwards Error Analysis&lt;/strong&gt;: We consider the relative error between the exact result and the floating point result.
-This gives us an error expression of&lt;/p&gt;
+<ol>
+  <li>
+    <p><strong>Forwards Error Analysis</strong>: We consider the relative error between the exact result and the floating point result.
+This gives us an error expression of</p>
 
 \[\frac{\mid \textbf{fl}(a + b + c) - (a + b + c) \mid }{ \mid a + b + c \mid}\]
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;Backwards Error Analysis&lt;/strong&gt;: We consider the result as being the exact correct operation done to almost the correct inputs.
+  </li>
+  <li>
+    <p><strong>Backwards Error Analysis</strong>: We consider the result as being the exact correct operation done to almost the correct inputs.
 In this case, we get
 \(\textbf{fl}(a + b + c) = \hat{a} + \hat{b} + \hat{c}\)
 where \(\hat{a} = a(1 + 2\delta_4)\) and so on. Then, we bound how close these inputs are to the actual inputs.
-In this case, we would say that&lt;/p&gt;
+In this case, we would say that</p>
 
 \[\left| \frac{\hat{a} - a}{a} \right| \leq \epsilon.\]
-  &lt;/li&gt;
-&lt;/ol&gt;
+  </li>
+</ol>
 
-&lt;p&gt;In this case, it turns out that forward error analysis gives extremely weak bounds. We can construct special inputs to make the relative forward error bound as bad as we want.
-The relative error bound will simplify to&lt;/p&gt;
+<p>In this case, it turns out that forward error analysis gives extremely weak bounds. We can construct special inputs to make the relative forward error bound as bad as we want.
+The relative error bound will simplify to</p>
 
 \[\frac{2 |a + b| + |c|}{| a + b + c|} \frac{\epsilon}{2}\]
 
-&lt;p&gt;which grows very large if we choose some very small number \(x\), and then let \(a + b = 1\), and \(c = - 1 + x\).
-Then, our error bound becomes&lt;/p&gt;
+<p>which grows very large if we choose some very small number \(x\), and then let \(a + b = 1\), and \(c = - 1 + x\).
+Then, our error bound becomes</p>
 
 \[\frac{3 - x}{x} \frac{\epsilon}{2}\]
 
-&lt;p&gt;which goes to infinity as we let \(x \to 0\).
-Thus, this relative error bound is not useful.&lt;/p&gt;
+<p>which goes to infinity as we let \(x \to 0\).
+Thus, this relative error bound is not useful.</p>
 
-&lt;p&gt;Therefore, it is better to use backwards error analysis for this example.
-In fact, this is true in general for analyzing floating point error.&lt;/p&gt;
+<p>Therefore, it is better to use backwards error analysis for this example.
+In fact, this is true in general for analyzing floating point error.</p>
 
-&lt;div class=&quot;footnotes&quot; role=&quot;doc-endnotes&quot;&gt;
-  &lt;ol&gt;
-    &lt;li id=&quot;fn:1&quot; role=&quot;doc-endnote&quot;&gt;
-      &lt;p&gt;The standard for breaking ties in floating point rounding is to &lt;em&gt;round such that the last bit of the result is 0&lt;/em&gt;. Clearly, between any two numbers, one will have a last bit 0. This is a different practice than the standard rules of breaking ties by rounding up or down. If we consider rounding up or down, we can see that this would introduce a bias to our floating point calculations: The floating point result of any operation will be less than or equal to the true result if we only round up (or vice versa if we rounded up). By rounding such that the last bit is 0, the symmetry in that operation to that makes this an unbiased operation over random numbers. &lt;a href=&quot;#fnref:1&quot; class=&quot;reversefootnote&quot; role=&quot;doc-backlink&quot;&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
-    &lt;/li&gt;
-    &lt;li id=&quot;fn:2&quot; role=&quot;doc-endnote&quot;&gt;
-      &lt;p&gt;This is slightly imprecise, but you can convince yourself of this by considering the possible errors right around the ‘breakpoints’ of \(x=1\) and \(x=2\). Then, you can see how this extends to the general breakpoints present at powers of 2. &lt;a href=&quot;#fnref:2&quot; class=&quot;reversefootnote&quot; role=&quot;doc-backlink&quot;&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
-    &lt;/li&gt;
-  &lt;/ol&gt;
-&lt;/div&gt;</content><author><name>Nate Armstrong</name><email>narmstrong@berkeley.edu</email></author><summary type="html">Floating point is the most commonly used number format for calculations. However, most people don’t know how error is created and propagated in floating point calculations. In this post, I go over the basics of understanding floating point rounding and error bounds.</summary></entry></feed>
+<div class="footnotes" role="doc-endnotes">
+  <ol>
+    <li id="fn:1" role="doc-endnote">
+      <p>The standard for breaking ties in floating point rounding is to <em>round such that the last bit of the result is 0</em>. Clearly, between any two numbers, one will have a last bit 0. This is a different practice than the standard rules of breaking ties by rounding up or down. If we consider rounding up or down, we can see that this would introduce a bias to our floating point calculations: The floating point result of any operation will be less than or equal to the true result if we only round up (or vice versa if we rounded up). By rounding such that the last bit is 0, the symmetry in that operation to that makes this an unbiased operation over random numbers. <a href="#fnref:1" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+    </li>
+    <li id="fn:2" role="doc-endnote">
+      <p>This is slightly imprecise, but you can convince yourself of this by considering the possible errors right around the ‘breakpoints’ of \(x=1\) and \(x=2\). Then, you can see how this extends to the general breakpoints present at powers of 2. <a href="#fnref:2" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+    </li>
+  </ol>
+</div>]]></content><author><name>Nate Armstrong</name><email>narmstrong@berkeley.edu</email></author><category term="Math" /><category term="Computer Science" /><summary type="html"><![CDATA[Floating point is the most commonly used number format for calculations. In this post, I go over the basics of understanding floating point rounding and error bounds.]]></summary></entry></feed>

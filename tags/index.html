@@ -9,7 +9,7 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>website.</title>
+<!-- begin _includes/seo.html --><title>Posts by Tag - website.</title>
 <meta name="description" content="A place to put thoughts on math, statistics, and computer science.">
 
 
@@ -20,8 +20,8 @@
 <meta property="og:type" content="website">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="website.">
-<meta property="og:title" content="website.">
-<meta property="og:url" content="http://localhost:4000/">
+<meta property="og:title" content="Posts by Tag">
+<meta property="og:url" content="http://localhost:4000/tags/">
 
 
   <meta property="og:description" content="A place to put thoughts on math, statistics, and computer science.">
@@ -41,7 +41,7 @@
   
 
 
-<link rel="canonical" href="http://localhost:4000/">
+<link rel="canonical" href="http://localhost:4000/tags/">
 
 
 
@@ -107,7 +107,7 @@
 
   </head>
 
-  <body class="layout--home">
+  <body class="layout--tags">
     <nav class="skip-links">
   <ul>
     <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
@@ -147,6 +147,32 @@
     <div class="initial-content">
       
 
+
+  
+    
+
+
+
+<nav class="breadcrumbs">
+  <ol itemscope itemtype="https://schema.org/BreadcrumbList">
+    
+    
+    
+      
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="http://localhost:4000/" itemprop="item"><span itemprop="name">Home</span></a>
+          <meta itemprop="position" content="1" />
+        </li>
+        <span class="sep">/</span>
+      
+      
+        <li class="current">Posts by Tag</li>
+      
+    
+  </ol>
+</nav>
+
+  
 
 
 <div id="main" role="main">
@@ -273,57 +299,61 @@
 
   <div class="archive">
     
-      <h1 id="page-title" class="page__title"></h1>
+      <h1 id="page-title" class="page__title">Posts by Tag</h1>
     
     
 
-<h3 class="archive__subtitle">Recent Posts</h3>
 
 
 
 
-<div class="entries-list">
+<ul class="taxonomy__index">
   
     
-
-
-
-<div class="list__item">
-  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
-    
-    <h2 class="archive__item-title no_toc" itemprop="headline">
       
-        <a href="/pick-the-largest-number/" rel="permalink">Guess the Largest Number Paradox
-</a>
+        <li>
+          <a href="#math">
+            <strong>Math</strong> <span class="taxonomy__count">2</span>
+          </a>
+        </li>
       
-    </h2>
-    
-
-  <p class="page__meta">
-    
-
-    
-
     
       
+        <li>
+          <a href="#computer-science">
+            <strong>Computer Science</strong> <span class="taxonomy__count">2</span>
+          </a>
+        </li>
       
-
-      <span class="page__meta-readtime">
-        <i class="far fa-clock" aria-hidden="true"></i>
-        
-          5 minute read
-        
-      </span>
     
-  </p>
+      
+    
+  
+    
+      
+    
+      
+    
+      
+        <li>
+          <a href="#statistics">
+            <strong>Statistics</strong> <span class="taxonomy__count">1</span>
+          </a>
+        </li>
+      
+    
+  
+</ul>
 
 
-    <p class="archive__item-excerpt" itemprop="description">Many statistical paradoxes boil down to an imprecise problem statement, but this is one paradox that is truly astonishing, where we seem to get information f...</p>
-  </article>
-</div>
 
   
     
+      <section id="math" class="taxonomy__section">
+        <h2 class="archive__subtitle">Math</h2>
+        <div class="entries-list">
+          
+            
 
 
 
@@ -361,8 +391,8 @@
   </article>
 </div>
 
-  
-    
+          
+            
 
 
 
@@ -400,10 +430,157 @@
   </article>
 </div>
 
+          
+        </div>
+        <a href="#page-title" class="back-to-top">Back to Top &uarr;</a>
+      </section>
+    
   
+    
+      <section id="computer-science" class="taxonomy__section">
+        <h2 class="archive__subtitle">Computer Science</h2>
+        <div class="entries-list">
+          
+            
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/floating-point-error-example/" rel="permalink">Floating Point Error Example
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          6 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Last post, we talked about how to understand floating point error, but the only example we consider was the trivial case of a + b + c. In this post, we will ...</p>
+  </article>
 </div>
 
+          
+            
 
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/understanding-floating-point-error/" rel="permalink">Understanding Floating Point Error
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          9 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Floating point is the most commonly used number format for calculations. In this post, I go over the basics of understanding floating point rounding and erro...</p>
+  </article>
+</div>
+
+          
+        </div>
+        <a href="#page-title" class="back-to-top">Back to Top &uarr;</a>
+      </section>
+    
+  
+    
+  
+
+  
+    
+  
+    
+  
+    
+      <section id="statistics" class="taxonomy__section">
+        <h2 class="archive__subtitle">Statistics</h2>
+        <div class="entries-list">
+          
+            
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pick-the-largest-number/" rel="permalink">Guess the Largest Number Paradox
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          5 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Many statistical paradoxes boil down to an imprecise problem statement, but this is one paradox that is truly astonishing, where we seem to get information f...</p>
+  </article>
+</div>
+
+          
+        </div>
+        <a href="#page-title" class="back-to-top">Back to Top &uarr;</a>
+      </section>
+    
+  
 
 
   </div>

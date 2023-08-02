@@ -1,0 +1,645 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.24.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Guess the Largest Number Paradox - website.</title>
+<meta name="description" content="Many statistical paradoxes boil down to an imprecise problem statement, but this is one paradox that is truly astonishing, where we seem to get information from absolutely nothing.">
+
+
+  <meta name="author" content="Nate Armstrong">
+  
+  <meta property="article:author" content="Nate Armstrong">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="website.">
+<meta property="og:title" content="Guess the Largest Number Paradox">
+<meta property="og:url" content="http://localhost:4000/pick-the-largest-number/">
+
+
+  <meta property="og:description" content="Many statistical paradoxes boil down to an imprecise problem statement, but this is one paradox that is truly astonishing, where we seem to get information from absolutely nothing.">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2023-07-31T01:00:00-07:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="http://localhost:4000/pick-the-largest-number/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "Nate Armstrong",
+      "url": "http://localhost:4000/"
+    
+  }
+</script>
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="website. Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+
+<!-- Include Favicon -->
+<link rel="shortcut icon" type="image/png" href="/assets/fav/favi32.png">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          website.
+          <span class="site-subtitle">thoughts on math, statistics, and computer science.</span>
+        </a>
+        <ul class="visible-links"></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+  
+    
+
+
+
+<nav class="breadcrumbs">
+  <ol itemscope itemtype="https://schema.org/BreadcrumbList">
+    
+    
+    
+      
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="http://localhost:4000/" itemprop="item"><span itemprop="name">Home</span></a>
+          <meta itemprop="position" content="1" />
+        </li>
+        <span class="sep">/</span>
+      
+      
+        <li class="current">Guess the Largest Number Paradox</li>
+      
+    
+  </ol>
+</nav>
+
+  
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/assets/img/profile.jpeg" alt="Nate Armstrong" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Nate Armstrong</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>Software Engineering with an interest in math and statistics.</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Berkeley, CA</span>
+        </li>
+      
+
+      
+        
+          
+        
+          
+            <li><a href="https://github.com/naterarmstrong" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://www.linkedin.com/in/naterarmstrong/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span></a></li>
+          
+        
+      
+
+      
+
+      
+        <li>
+          <a href="mailto:narmstrong@berkeley.edu">
+            <meta itemprop="email" content="narmstrong@berkeley.edu" />
+            <i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span>
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Guess the Largest Number Paradox">
+    <meta itemprop="description" content="Many statistical paradoxes boil down to an imprecise problem statement, but this is one paradox that is truly astonishing, where we seem to get information from absolutely nothing.">
+    <meta itemprop="datePublished" content="2023-07-31T01:00:00-07:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">Guess the Largest Number Paradox
+</h1>
+          
+            <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+6 minutes to read
+</p>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+
+
+	<script type="text/x-mathjax-config">
+	  MathJax.Hub.Config({
+	    extensions: [
+	      "MathMenu.js",
+	      "MathZoom.js",
+	      "AssistiveMML.js",
+	      "a11y/accessibility-menu.js"
+	    ],
+	    jax: ["input/TeX", "output/CommonHTML"],
+	    TeX: {
+	      extensions: [
+	        "AMSmath.js",
+	        "AMSsymbols.js",
+	        "noErrors.js",
+	        "noUndefined.js",
+	      ]
+	    }
+	  });
+	</script>
+	<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+        <p>Many statistical paradoxes boil down to an imprecise problem statement, but this is one paradox that is truly astonishing, where we seem to get information from absolutely nothing.</p>
+
+<h2 id="the-problem">The Problem</h2>
+
+<p>Consider a simple game. There are two pieces of face-down paper on the table, and there is a number written on each. You don’t know anything about the numbers. You flip over one of the pieces of paper at random, and read the number on it. Now, you need to decide if you think this is the larger of the two numbers. What do you do?</p>
+
+<p>Intuitively, there is no better solution that guessing randomly, and you cannot guess which number is bigger more than 50% of the time.
+You have no information about the other number, so you might as well guess randomly.</p>
+
+<h2 id="the-solution">The Solution</h2>
+
+<p>However, this is not actually the best that you can do.
+There is a way to guess correctly <em>strictly</em> more than 50% of the time, formalized by Thomas Cover in 1987 in only a single paragraph.<a href="https://isl.stanford.edu/~cover/papers/paper73.pdf">1</a></p>
+
+<p>Pick a “splitting number” \(T\) at random according to a normal distribution. When you reveal the number \(X\), compare \(T\) and \(X\).
+If \(X &gt;= T\), guess that \(X\) is the larger number.
+If \(X &lt; T\), guess that \(X\) is the smaller number.</p>
+
+<h3 id="why-does-it-work">Why does it work?</h3>
+
+<p>This solution works because <em>you always answer correctly</em> when \(T\) is between the two numbers, and answer correctly 50% of the time otherwise.
+It’s easiest to see this visually.</p>
+
+<p>Let’s call the smaller of the two numbers \(A\), and the larger of the two numbers \(B\). Alone, that looks like this:</p>
+
+<p><img src="/assets/img/pick-the-largest-number/ab-alone.png" alt="A then B" /></p>
+
+<p>Now, we create our random guess \(T\). We first investigate the easy options, where \(T\) is smaller than both numbers or larger than both numbers.</p>
+
+<p><img src="/assets/img/pick-the-largest-number/tab-order.png" alt="T, then A, then B" /></p>
+
+<p>In this case, we always guess that the number revealed is the larger of the two, based on our strategy from before.
+We will be correct if \(B\) is chosen, and wrong if \(A\) is chosen.
+Because we choose between \(A\) and \(B\) randomly, we will pick \(B\) 50% of the time, and thus will guess correctly 50% of the time.</p>
+
+<p><img src="/assets/img/pick-the-largest-number/abt-order.png" alt="A, then B, then T" /></p>
+
+<p>In this case, we always guess that the number revealed is the smaller of the two, based on our strategy from before.
+We will be correct if \(A\) is chosen, and wrong if \(B\) is chosen.
+Similarly to before, we will pick \(A\) 50% of the time, and thus will guess correctly 50% of the time.</p>
+
+<p><img src="/assets/img/pick-the-largest-number/atb-orange.png" alt="A, then T, then B" /></p>
+
+<p>If $T$ is between $A$ and $B$, our guess depends on <em>which</em> of \(A\) and \(B\) is chosen.</p>
+
+<p><img src="/assets/img/pick-the-largest-number/atb-a-transparent.png" alt="ATB A Transparent" /></p>
+
+<p>If \(B\) is chosen, we will correctly say that \(B\) is the larger of the two.</p>
+
+<p><img src="/assets/img/pick-the-largest-number/atb-b-transparent.png" alt="ATB B Transparent" /></p>
+
+<p>Similarly, If \(A\) is chosen, we will correctly say that \(A\) is the smaller of the two.
+If $T$ is between $A$ and $B$, we always answer correctly.</p>
+
+<p>We can summarize our results like the below.</p>
+
+<p><img src="/assets/img/pick-the-largest-number/ab-explanation.png" alt="explanation" /></p>
+
+<h2 id="analysis">Analysis</h2>
+
+<p>How likely is it that we guess correctly?
+We can summarize it into the formula below by splitting into three cases based on how \(T\) compares to \(A\) and \(B\).</p>
+
+\[\begin{align}
+P(\text{correct}) &amp;= \frac{P(T \leq A)}{2} + P(A &lt; T \leq B) + \frac{P(T &gt; B)}{2} \\
+&amp;= \frac{P(T \leq A) + P(T &gt; B)}{2} + P(A &lt; T \leq B) \\
+&amp;= \frac{1 - P(A &lt; T \leq B)}{2} + P(A &lt; T \leq B) \\
+&amp;= \frac{1}{2} + \frac{P(A &lt; T \leq B)}{2}
+\end{align}\]
+
+<p>Now, all we need to do is figure out how likely we are to have \(T\) between \(A\) and \(B\).
+Because we picked out \(T\) from a normal distribution, we can directly solve for this probability.
+With a little inspection, we can see that this probability is <em>strictly</em> greater than 0 for all positive numbers, and as such the odds that \(T\) is between \(A\) and \(B\) is also strictly positive.</p>
+
+\[P(A &lt; T \leq B) = \int_A^B \frac{1}{\sqrt{2\pi}} e^{-\frac{x^2}{2}} dx\]
+
+<p>Thus, our final equation for the probability we guess correctly is</p>
+
+\[P(\text{correct}) = \frac{1}{2} + \int_A^B \frac{1}{\sqrt{8\pi}} e^{-\frac{x^2}{2}} dx\]
+
+<p>We can evaluate this for some different values of \(A\) and \(B\) to investigate how this behaves.</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>A: 0  B: 1
+   Probability: 0.6707
+A: 0  B: 10
+   Probability: 0.75
+A: 5  B: 10
+   Probability: 0.50000014
+A: 7  B: 10
+   Probability: 0.500000000001
+</code></pre></div></div>
+
+<p>It’s clear that the probability goes down when \(A\) and \(B\) are closer to each other, and also goes down when \(A\) and \(B\) are farther from 1.
+In fact, by the time \(A\) and \(B\) are both greater than 10, the difference from 0.5 is below the precision of most software.
+However, it always positive.</p>
+
+<p>This is the real caveat to the strong statement of “strictly greater than .5”. Although the probability of guessing correctly is better than one half, it is not <em>uniformly</em> greater than one half. Unless we assume some prior distribution of \(A\) and \(B\), this strategy is basically exactly as effective as randomly guessing.</p>
+
+<p>More precisely, as long as you know nothing about \(A\) and \(B\), you cannot ever get measurably far from a probability of one half. For any \(\epsilon &gt; 0\), you can never achieve a probability of guessing correctly that is at least \(\frac{1}{2} + \epsilon\).</p>
+
+<p>Even further, if we <em>do</em> know something about the distribution of \(A\) and \(B\), this is <em>still</em> not the best strategy. If we know that \(A\) and \(B\) come independently from some distribution \(F\), we should still use a “splitting number” strategy, but our splitting point \(T\) should be exactly the median of the distribution \(F\).</p>
+
+<p>This lines up with intuition about this type of problem. If you know that \(A\) and \(B\) are drawn uniformly from the range \([0, 10]\), we guess that numbers less than 5 are the smaller of the two, and numbers greater than 5 are the greater of the two.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>In summary, although this paradox is incredibly surprising, it does not ultimately subvert our understanding of the wordl.
+It seems like we get <em>information</em>, out of nothing, but it turns out that the advantage gained is so small as to be negligible.</p>
+
+<p>For further reading on this topic, you can consider looking at <a href="https://www.quantamagazine.org/solution-information-from-randomness-20150722/">this Quanta article</a> on the same topic.</p>
+
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/tags/#statistics" class="page__taxonomy-item" rel="tag">Statistics</a>
+    
+    </span>
+  </p>
+
+
+
+
+        
+          <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2023-07-31T01:00:00-07:00">July 31, 2023</time></p>
+        
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="/floating-point-error-example/" class="pagination--pager" title="Floating Point Error Example
+">Previous</a>
+    
+    
+      <a href="#" class="pagination--pager disabled">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You May Also Enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/floating-point-error-example/" rel="permalink">Floating Point Error Example
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          6 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Last post, we talked about how to understand floating point error, but the only example we consider was the trivial case of a + b + c. In this post, we will ...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/understanding-floating-point-error/" rel="permalink">Understanding Floating Point Error
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          9 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Floating point is the most commonly used number format for calculations. In this post, I go over the basics of understanding floating point rounding and erro...</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+      
+        
+          <li><a href="https://github.com/naterarmstrong" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.linkedin.com/in/naterarmstrong/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> LinkedIn</a></li>
+        
+      
+    
+
+    
+      <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2023 Nate Armstrong. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+  </body>
+</html>
