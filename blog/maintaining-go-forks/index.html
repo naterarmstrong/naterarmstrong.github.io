@@ -1,0 +1,185 @@
+<!DOCTYPE html><html lang="en-US" class="no-js"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Maintaining Go Forks - website.</title><meta name="description" content="How to create and reference your own fork of a go dependency"><meta name="author" content="Nate Armstrong"><link rel="canonical" href="https://naterarmstrong.github.io/blog/maintaining-go-forks/"><meta property="og:type" content="article"><meta property="og:locale" content="en_US"><meta property="og:site_name" content="website."><meta property="og:title" content="Maintaining Go Forks"><meta property="og:description" content="How to create and reference your own fork of a go dependency"><meta property="og:url" content="https://naterarmstrong.github.io/blog/maintaining-go-forks/"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="Maintaining Go Forks"><meta name="twitter:description" content="How to create and reference your own fork of a go dependency"><link href="/feed.xml" type="application/atom+xml" rel="alternate" title="website. Feed"><script>
+	document.documentElement.className =
+		document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"><link rel="shortcut icon" type="image/png" href="/assets/fav/favi32.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Nate Armstrong","url":"https://naterarmstrong.github.io/"}</script><script async src="https://www.googletagmanager.com/gtag/js?id=G-EZ1T10E80D"></script><script>(function(){const GA_TRACKING_ID = "G-EZ1T10E80D";
+
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+	gtag('config', GA_TRACKING_ID);
+})();</script><link rel="stylesheet" href="/_astro/index.B8rrE1M3.css"></head> <body class="layout--single"> <nav class="skip-links"> <ul> <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li> <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li> </ul> </nav> <div class="masthead"> <div class="masthead__inner-wrap"> <div class="masthead__menu"> <nav id="site-nav" class="greedy-nav"> <a class="site-title" href="/"> website. <span class="site-subtitle">thoughts on math, statistics, and computer science.</span> </a> <ul class="visible-links"> <li class="masthead__menu-item"> <a href="/blog/" class="active"> Blog </a> </li><li class="masthead__menu-item"> <a href="/tags/"> Tags </a> </li><li class="masthead__menu-item"> <a href="/tools/"> Tools </a> </li><li class="masthead__menu-item"> <a href="/tools/moonlander/"> Moonlander </a> </li><li class="masthead__menu-item"> <a href="/about/"> About </a> </li> </ul> <button class="greedy-nav__toggle hidden" type="button"> <span class="visually-hidden">Toggle menu</span> <div class="navicon"></div> </button> <ul class="hidden-links hidden"></ul> </nav> </div> </div> </div> <div class="initial-content"> <nav class="breadcrumbs"> <ol itemscope itemtype="https://schema.org/BreadcrumbList"> <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"> <a href="https://naterarmstrong.github.io/" itemprop="item"><span itemprop="name">Home</span></a> <meta itemprop="position" content="1"> </li>  <span class="sep">/</span> <li class="current">Maintaining Go Forks</li> </ol> </nav>  <div id="main" role="main"> <div class="sidebar sticky"> <div itemscope itemtype="https://schema.org/Person"> <div class="author__avatar"> <img src="/assets/img/profile.jpeg" alt="Nate Armstrong" itemprop="image"> </div> <div class="author__content"> <h3 class="author__name" itemprop="name">Nate Armstrong</h3> <div class="author__bio" itemprop="description"> <p>UC Berkeley Alumni. Software engineer.</p> </div> </div> <div class="author__urls-wrapper"> <button class="btn btn--inverse">Follow</button> <ul class="author__urls social-icons"> <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place"> <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i>  <span itemprop="name">Berkeley, CA</span> </li> <li> <a href="https://github.com/naterarmstrong" rel="nofollow noopener noreferrer"> <i class="fab fa-fw fa-github" aria-hidden="true"></i> <span class="label">GitHub</span> </a> </li><li> <a href="https://www.linkedin.com/in/naterarmstrong/" rel="nofollow noopener noreferrer"> <i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> <span class="label">LinkedIn</span> </a> </li> <li> <a href="mailto:narmstrong@berkeley.edu"> <meta itemprop="email" content="narmstrong@berkeley.edu"> <i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i> <span class="label">Email</span> </a> </li> </ul> </div> </div> </div> <article class="page" itemscope itemtype="https://schema.org/CreativeWork"> <meta itemprop="headline" content="Maintaining Go Forks"> <meta itemprop="description" content="How to create and reference your own fork of a go dependency"> <meta itemprop="datePublished" content="2025-03-25T00:00:00.000Z"> <div class="page__inner-wrap"> <header> <h1 id="page-title" class="page__title" itemprop="headline">Maintaining Go Forks</h1> <p class="page__meta"> <i class="far fa-clock" aria-hidden="true"></i> 7 minutes to read
+</p> </header> <section class="page__content" itemprop="text">  <p>This is a tutorial on maintaining a fork of a go dependency with the <code>replace</code> directive in <code>go.mod</code>.</p>
+<p>When using any language, it is common to run into an error with a dependency, and you ne4ed to fix it yourself.
+Alternatively, your use of the library may be slightly different that what the maintaner wants to support, and so you need to maintain your own fork of the library.</p>
+<p>Fortunately, go modules are pretty good at supporting this need with the replace directive.
+We’ll go through the process of creating a fork of a git repository, making changes, and updating your project dependency.</p>
+<h2 id="setting-up">Setting Up</h2>
+<p>If you want to follow along with the process detailed here, the two repositories for this example are:</p>
+<ul>
+<li>The library to fork: <a href="https://github.com/naterarmstrong/forkable-library">https://github.com/naterarmstrong/forkable-library</a></li>
+<li>Your go project depending on the fork: <a href="https://github.com/naterarmstrong/go-fork-practice">https://github.com/naterarmstrong/go-fork-practice</a></li>
+</ul>
+<h3 id="your-go-project">Your Go Project</h3>
+<p>Your go project is a very simple one, and it only has two short files. You can practice modifying this by cloning the practice library with</p>
+<pre class="astro-code material-theme" style="background-color:#263238;color:#EEFFFF; overflow-x: auto;" tabindex="0" data-language="sh"><code><span class="line"><span style="color:#FFCB6B">git</span><span style="color:#C3E88D"> clone</span><span style="color:#C3E88D"> git@github.com:naterarmstrong/go-fork-practice.git</span></span>
+<span class="line"></span></code></pre>
+<p>First, we have our <code>go.mod</code>, which specifies the name of our module, the go version, and that we depend on the forkable library.</p>
+<pre class="astro-code material-theme" style="background-color:#263238;color:#EEFFFF; overflow-x: auto;" tabindex="0" data-language="go"><code><span class="line"><span style="color:#EEFFFF">module github</span><span style="color:#89DDFF">.</span><span style="color:#EEFFFF">com</span><span style="color:#89DDFF">/</span><span style="color:#EEFFFF">naterarmstrong</span><span style="color:#89DDFF">/</span><span style="color:#89DDFF;font-style:italic">go</span><span style="color:#89DDFF">-</span><span style="color:#EEFFFF">fork</span><span style="color:#89DDFF">-</span><span style="color:#EEFFFF">practice</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#89DDFF;font-style:italic">go</span><span style="color:#F78C6C"> 1.22</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#EEFFFF">require github</span><span style="color:#89DDFF">.</span><span style="color:#EEFFFF">com</span><span style="color:#89DDFF">/</span><span style="color:#EEFFFF">naterarmstrong</span><span style="color:#89DDFF">/</span><span style="color:#EEFFFF">forkable</span><span style="color:#89DDFF">-</span><span style="color:#EEFFFF">library v1</span><span style="color:#89DDFF">.</span><span style="color:#F78C6C">1.0</span></span>
+<span class="line"></span></code></pre>
+<p>Second, we have our main function, which is a very simple CLI tool that uses the library to apply an echo effect to the argument passed in.</p>
+<pre class="astro-code material-theme" style="background-color:#263238;color:#EEFFFF; overflow-x: auto;" tabindex="0" data-language="go"><code><span class="line"><span style="color:#89DDFF">package</span><span style="color:#FFCB6B"> main</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#89DDFF;font-style:italic">import</span><span style="color:#89DDFF"> (</span></span>
+<span class="line"><span style="color:#89DDFF">	"</span><span style="color:#FFCB6B">fmt</span><span style="color:#89DDFF">"</span></span>
+<span class="line"><span style="color:#89DDFF">	"</span><span style="color:#FFCB6B">os</span><span style="color:#89DDFF">"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#89DDFF">	"</span><span style="color:#FFCB6B">github.com/naterarmstrong/forkable-library/echo</span><span style="color:#89DDFF">"</span></span>
+<span class="line"><span style="color:#89DDFF">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#89DDFF">func</span><span style="color:#82AAFF"> main</span><span style="color:#89DDFF">()</span><span style="color:#89DDFF"> {</span></span>
+<span class="line"><span style="color:#89DDFF;font-style:italic">	if</span><span style="color:#EEFFFF"> err </span><span style="color:#89DDFF">:=</span><span style="color:#82AAFF"> run</span><span style="color:#89DDFF">(</span><span style="color:#EEFFFF">os</span><span style="color:#89DDFF">.</span><span style="color:#EEFFFF">Args</span><span style="color:#89DDFF">);</span><span style="color:#EEFFFF"> err </span><span style="color:#89DDFF">!=</span><span style="color:#89DDFF"> nil</span><span style="color:#89DDFF"> {</span></span>
+<span class="line"><span style="color:#EEFFFF">		fmt</span><span style="color:#89DDFF">.</span><span style="color:#82AAFF">Fprintln</span><span style="color:#89DDFF">(</span><span style="color:#EEFFFF">os</span><span style="color:#89DDFF">.</span><span style="color:#EEFFFF">Stderr</span><span style="color:#89DDFF">,</span><span style="color:#89DDFF"> "</span><span style="color:#C3E88D">error:</span><span style="color:#89DDFF">"</span><span style="color:#89DDFF">,</span><span style="color:#EEFFFF"> err</span><span style="color:#89DDFF">)</span></span>
+<span class="line"><span style="color:#EEFFFF">		os</span><span style="color:#89DDFF">.</span><span style="color:#82AAFF">Exit</span><span style="color:#89DDFF">(</span><span style="color:#F78C6C">1</span><span style="color:#89DDFF">)</span></span>
+<span class="line"><span style="color:#89DDFF">	}</span></span>
+<span class="line"><span style="color:#89DDFF">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#89DDFF">func</span><span style="color:#82AAFF"> run</span><span style="color:#89DDFF">(</span><span style="color:#EEFFFF;font-style:italic">args</span><span style="color:#89DDFF"> []</span><span style="color:#C792EA">string</span><span style="color:#89DDFF">)</span><span style="color:#C792EA"> error</span><span style="color:#89DDFF"> {</span></span>
+<span class="line"><span style="color:#89DDFF;font-style:italic">	if</span><span style="color:#82AAFF"> len</span><span style="color:#89DDFF">(</span><span style="color:#EEFFFF">args</span><span style="color:#89DDFF">)</span><span style="color:#89DDFF"> &#x3C;</span><span style="color:#F78C6C"> 2</span><span style="color:#89DDFF"> {</span></span>
+<span class="line"><span style="color:#89DDFF;font-style:italic">		return</span><span style="color:#EEFFFF"> fmt</span><span style="color:#89DDFF">.</span><span style="color:#82AAFF">Errorf</span><span style="color:#89DDFF">(</span><span style="color:#89DDFF">"</span><span style="color:#C3E88D">usage: </span><span style="color:#F07178">%s</span><span style="color:#C3E88D"> &#x3C;message></span><span style="color:#89DDFF">"</span><span style="color:#89DDFF">,</span><span style="color:#EEFFFF"> args</span><span style="color:#89DDFF">[</span><span style="color:#F78C6C">0</span><span style="color:#89DDFF">])</span></span>
+<span class="line"><span style="color:#89DDFF">	}</span></span>
+<span class="line"><span style="color:#EEFFFF">	echo</span><span style="color:#89DDFF">.</span><span style="color:#82AAFF">Echo</span><span style="color:#89DDFF">(</span><span style="color:#EEFFFF">args</span><span style="color:#89DDFF">[</span><span style="color:#F78C6C">1</span><span style="color:#89DDFF">])</span></span>
+<span class="line"><span style="color:#89DDFF;font-style:italic">	return</span><span style="color:#89DDFF"> nil</span></span>
+<span class="line"><span style="color:#89DDFF">}</span></span>
+<span class="line"></span></code></pre>
+<h3 id="exposing-the-problem">Exposing the problem</h3>
+<p>When we first test this, we get a good output:</p>
+<pre class="astro-code material-theme" style="background-color:#263238;color:#EEFFFF; overflow-x: auto;" tabindex="0" data-language="text"><code><span class="line"><span>$ go-fork-practice Hello!</span></span>
+<span class="line"><span>Hello!</span></span>
+<span class="line"><span>hello...</span></span>
+<span class="line"><span>hello...</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>However, when we try to check with a different input, the story is not so nice:</p>
+<pre class="astro-code material-theme" style="background-color:#263238;color:#EEFFFF; overflow-x: auto;" tabindex="0" data-language="text"><code><span class="line"><span>$ go-fork-practice Hello World!</span></span>
+<span class="line"><span>panic: Only one word is supported!</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>goroutine 1 [running]:</span></span>
+<span class="line"><span>github.com/naterarmstrong/forkable-library/echo.Echo({0x16bd3af59?, 0x0?})</span></span>
+<span class="line"><span>	/src/go/pkg/mod/github.com/naterarmstrong/forkable-library@v1.1.0/echo/echo.go:13 +0x138</span></span>
+<span class="line"><span>main.run({0x14000010020?, 0x0?, 0x14000052738?})</span></span>
+<span class="line"><span>	/src/go-fork-practice/main.go:21 +0x88</span></span>
+<span class="line"><span>    main.main()</span></span>
+<span class="line"><span>	/src/go-fork-practice/main.go:11 +0x34</span></span>
+<span class="line"><span></span></span></code></pre>
+<h3 id="the-library">The Library</h3>
+<p>We look at the definition of the <code>Echo</code> function, and see that there’s a clear problem: The library maintainer refuses to support our use case! We need to be able to input multiple words! There’s only one thing to do, reach for the fork button!</p>
+<pre class="astro-code material-theme" style="background-color:#263238;color:#EEFFFF; overflow-x: auto;" tabindex="0" data-language="go"><code><span class="line"><span style="color:#546E7A;font-style:italic">// Echo echoes a word so that it appears to echo in the terminal.</span></span>
+<span class="line"><span style="color:#89DDFF">func</span><span style="color:#82AAFF"> Echo</span><span style="color:#89DDFF">(</span><span style="color:#EEFFFF;font-style:italic">s</span><span style="color:#C792EA"> string</span><span style="color:#89DDFF">)</span><span style="color:#89DDFF"> {</span></span>
+<span class="line"><span style="color:#546E7A;font-style:italic">	// Maintainer's Note: Echoing multiple words is not in scope for this library and will not be supported.</span></span>
+<span class="line"><span style="color:#EEFFFF">	words </span><span style="color:#89DDFF">:=</span><span style="color:#EEFFFF"> strings</span><span style="color:#89DDFF">.</span><span style="color:#82AAFF">Split</span><span style="color:#89DDFF">(</span><span style="color:#EEFFFF">s</span><span style="color:#89DDFF">,</span><span style="color:#89DDFF"> "</span><span style="color:#89DDFF"> "</span><span style="color:#89DDFF">)</span></span>
+<span class="line"><span style="color:#89DDFF;font-style:italic">	if</span><span style="color:#82AAFF"> len</span><span style="color:#89DDFF">(</span><span style="color:#EEFFFF">words</span><span style="color:#89DDFF">)</span><span style="color:#89DDFF"> ></span><span style="color:#F78C6C"> 1</span><span style="color:#89DDFF"> {</span></span>
+<span class="line"><span style="color:#82AAFF">		panic</span><span style="color:#89DDFF">(</span><span style="color:#89DDFF">"</span><span style="color:#C3E88D">Only one word is supported!</span><span style="color:#89DDFF">"</span><span style="color:#89DDFF">)</span></span>
+<span class="line"><span style="color:#89DDFF">	}</span></span>
+<span class="line"><span style="color:#EEFFFF">	lowerCaseWord </span><span style="color:#89DDFF">:=</span><span style="color:#EEFFFF"> strings</span><span style="color:#89DDFF">.</span><span style="color:#82AAFF">ToLower</span><span style="color:#89DDFF">(</span><span style="color:#EEFFFF">words</span><span style="color:#89DDFF">[</span><span style="color:#F78C6C">0</span><span style="color:#89DDFF">])</span></span>
+<span class="line"><span style="color:#EEFFFF">	noPunctuationWord </span><span style="color:#89DDFF">:=</span><span style="color:#EEFFFF"> strings</span><span style="color:#89DDFF">.</span><span style="color:#82AAFF">TrimRightFunc</span><span style="color:#89DDFF">(</span><span style="color:#EEFFFF">lowerCaseWord</span><span style="color:#89DDFF">,</span><span style="color:#89DDFF"> func(</span><span style="color:#EEFFFF;font-style:italic">r</span><span style="color:#C792EA"> rune</span><span style="color:#89DDFF">)</span><span style="color:#C792EA"> bool</span><span style="color:#89DDFF"> {</span></span>
+<span class="line"><span style="color:#89DDFF;font-style:italic">		return</span><span style="color:#EEFFFF"> r </span><span style="color:#89DDFF">==</span><span style="color:#89DDFF"> '</span><span style="color:#C3E88D">!</span><span style="color:#89DDFF">'</span><span style="color:#89DDFF"> ||</span><span style="color:#EEFFFF"> r </span><span style="color:#89DDFF">==</span><span style="color:#89DDFF"> '</span><span style="color:#C3E88D">.</span><span style="color:#89DDFF">'</span></span>
+<span class="line"><span style="color:#89DDFF">	})</span></span>
+<span class="line"><span style="color:#EEFFFF">	fmt</span><span style="color:#89DDFF">.</span><span style="color:#82AAFF">Printf</span><span style="color:#89DDFF">(</span><span style="color:#89DDFF">"</span><span style="color:#F07178">%s</span><span style="color:#EEFFFF">\n</span><span style="color:#F07178">%s</span><span style="color:#C3E88D">...</span><span style="color:#EEFFFF">\n</span><span style="color:#F07178">%s</span><span style="color:#C3E88D">...</span><span style="color:#EEFFFF">\n</span><span style="color:#89DDFF">"</span><span style="color:#89DDFF">,</span><span style="color:#EEFFFF"> words</span><span style="color:#89DDFF">[</span><span style="color:#F78C6C">0</span><span style="color:#89DDFF">],</span><span style="color:#EEFFFF"> noPunctuationWord</span><span style="color:#89DDFF">,</span><span style="color:#EEFFFF"> noPunctuationWord</span><span style="color:#89DDFF">)</span></span>
+<span class="line"><span style="color:#89DDFF">}</span></span>
+<span class="line"></span></code></pre>
+<h2 id="creating-and-depending-on-a-fork">Creating and Depending on a Fork</h2>
+<h3 id="creating-a-fork">Creating a Fork</h3>
+<p>To create a fork of a git repository on github, just press the fork button to create your own version under <code>my-user/forkable-library</code>.</p>
+<p><img  src="/_astro/github-fork.DYnhBMEM_Z1CuI22.webp" alt="img" width="1052" height="432" loading="lazy" decoding="async"></p>
+<p>Now, we need to clone this repository:</p>
+<pre class="astro-code material-theme" style="background-color:#263238;color:#EEFFFF; overflow-x: auto;" tabindex="0" data-language="sh"><code><span class="line"><span style="color:#FFCB6B">git</span><span style="color:#C3E88D"> clone</span><span style="color:#C3E88D"> git@github.com:my-user/go-fork-practice.git</span></span>
+<span class="line"></span></code></pre>
+<p>change the implementation of echo:</p>
+<pre class="astro-code material-theme" style="background-color:#263238;color:#EEFFFF; overflow-x: auto;" tabindex="0" data-language="go"><code><span class="line"><span style="color:#546E7A;font-style:italic">// Echo echoes a string so that it appears to echo in the terminal.</span></span>
+<span class="line"><span style="color:#89DDFF">func</span><span style="color:#82AAFF"> Echo</span><span style="color:#89DDFF">(</span><span style="color:#EEFFFF;font-style:italic">s</span><span style="color:#C792EA"> string</span><span style="color:#89DDFF">)</span><span style="color:#89DDFF"> {</span></span>
+<span class="line"><span style="color:#EEFFFF">	words </span><span style="color:#89DDFF">:=</span><span style="color:#EEFFFF"> strings</span><span style="color:#89DDFF">.</span><span style="color:#82AAFF">Split</span><span style="color:#89DDFF">(</span><span style="color:#EEFFFF">s</span><span style="color:#89DDFF">,</span><span style="color:#89DDFF"> "</span><span style="color:#89DDFF"> "</span><span style="color:#89DDFF">)</span></span>
+<span class="line"><span style="color:#EEFFFF">	lowerCaseWord </span><span style="color:#89DDFF">:=</span><span style="color:#EEFFFF"> strings</span><span style="color:#89DDFF">.</span><span style="color:#82AAFF">ToLower</span><span style="color:#89DDFF">(</span><span style="color:#EEFFFF">words</span><span style="color:#89DDFF">[</span><span style="color:#82AAFF">len</span><span style="color:#89DDFF">(</span><span style="color:#EEFFFF">words</span><span style="color:#89DDFF">)</span><span style="color:#89DDFF"> -</span><span style="color:#F78C6C"> 1</span><span style="color:#89DDFF">])</span></span>
+<span class="line"><span style="color:#EEFFFF">	noPunctuationWord </span><span style="color:#89DDFF">:=</span><span style="color:#EEFFFF"> strings</span><span style="color:#89DDFF">.</span><span style="color:#82AAFF">TrimRightFunc</span><span style="color:#89DDFF">(</span><span style="color:#EEFFFF">lowerCaseWord</span><span style="color:#89DDFF">,</span><span style="color:#89DDFF"> func(</span><span style="color:#EEFFFF;font-style:italic">r</span><span style="color:#C792EA"> rune</span><span style="color:#89DDFF">)</span><span style="color:#C792EA"> bool</span><span style="color:#89DDFF"> {</span></span>
+<span class="line"><span style="color:#89DDFF;font-style:italic">		return</span><span style="color:#EEFFFF"> r </span><span style="color:#89DDFF">==</span><span style="color:#89DDFF"> '</span><span style="color:#C3E88D">!</span><span style="color:#89DDFF">'</span><span style="color:#89DDFF"> ||</span><span style="color:#EEFFFF"> r </span><span style="color:#89DDFF">==</span><span style="color:#89DDFF"> '</span><span style="color:#C3E88D">.</span><span style="color:#89DDFF">'</span></span>
+<span class="line"><span style="color:#89DDFF">	})</span></span>
+<span class="line"><span style="color:#EEFFFF">	fmt</span><span style="color:#89DDFF">.</span><span style="color:#82AAFF">Printf</span><span style="color:#89DDFF">(</span><span style="color:#89DDFF">"</span><span style="color:#F07178">%s</span><span style="color:#EEFFFF">\n</span><span style="color:#F07178">%s</span><span style="color:#C3E88D">...</span><span style="color:#EEFFFF">\n</span><span style="color:#F07178">%s</span><span style="color:#C3E88D">...</span><span style="color:#EEFFFF">\n</span><span style="color:#89DDFF">"</span><span style="color:#89DDFF">,</span><span style="color:#EEFFFF"> words</span><span style="color:#89DDFF">,</span><span style="color:#EEFFFF"> noPunctuationWord</span><span style="color:#89DDFF">,</span><span style="color:#EEFFFF"> noPunctuationWord</span><span style="color:#89DDFF">)</span></span>
+<span class="line"><span style="color:#89DDFF">}</span></span>
+<span class="line"></span></code></pre>
+<h3 id="testing-changes-to-your-fork">Testing Changes to your Fork</h3>
+<p>Let’s depend on it for local testing. Adding this specific change to your project’s <code>go.mod</code> assumes that the <code>forkable-library</code> directory on your local system is at the same level as <code>go-fork-practice</code>:</p>
+<pre class="astro-code material-theme" style="background-color:#263238;color:#EEFFFF; overflow-x: auto;" tabindex="0" data-language="go"><code><span class="line"><span style="color:#EEFFFF">replace github</span><span style="color:#89DDFF">.</span><span style="color:#EEFFFF">com</span><span style="color:#89DDFF">/</span><span style="color:#EEFFFF">naterarmstrong</span><span style="color:#89DDFF">/</span><span style="color:#EEFFFF">forkable</span><span style="color:#89DDFF">-</span><span style="color:#EEFFFF">library </span><span style="color:#89DDFF">=></span><span style="color:#89DDFF"> ../</span><span style="color:#EEFFFF">forkable</span><span style="color:#89DDFF">-</span><span style="color:#EEFFFF">library</span></span>
+<span class="line"></span></code></pre>
+<p>This tells Go that it should look in your local filesystem to find the repository, instead of going to <code>github</code> to fetch it. If we tidy the mod (<code>go mod tidy</code>), install (<code>go install ./...</code>), and run our earlier example with this code instead, we get a better result:</p>
+<pre class="astro-code material-theme" style="background-color:#263238;color:#EEFFFF; overflow-x: auto;" tabindex="0" data-language="text"><code><span class="line"><span>$ go-fork-practice "Hello World\!"</span></span>
+<span class="line"><span>Hello World!</span></span>
+<span class="line"><span>world...</span></span>
+<span class="line"><span>world...</span></span>
+<span class="line"><span></span></span></code></pre>
+<h4 id="remote-build-systems">Remote Build Systems</h4>
+<p>If you need to check if your build will work on a remote system, it won’t be feasible to depend on a local directory.
+In that case, you can update the replace directive to depend on a specific commit of the forked library.</p>
+<p>Add and commit your changes to the fork (<code>git add *</code>, <code>git commit -m "Support multiple words"</code>), and then retrieve a unique descriptor of the current fork commit with</p>
+<pre class="astro-code material-theme" style="background-color:#263238;color:#EEFFFF; overflow-x: auto;" tabindex="0" data-language="sh"><code><span class="line"><span style="color:#FFCB6B">$</span><span style="color:#C3E88D"> git</span><span style="color:#C3E88D"> rev-parse</span><span style="color:#C3E88D"> --short=12</span><span style="color:#C3E88D"> HEAD</span></span>
+<span class="line"><span style="color:#FFCB6B">d298b0add2ca</span></span>
+<span class="line"></span></code></pre>
+<p>Then, update your replace directive to be</p>
+<pre class="astro-code material-theme" style="background-color:#263238;color:#EEFFFF; overflow-x: auto;" tabindex="0" data-language="go"><code><span class="line"><span style="color:#EEFFFF">replace github</span><span style="color:#89DDFF">.</span><span style="color:#EEFFFF">com</span><span style="color:#89DDFF">/</span><span style="color:#EEFFFF">naterarmstrong</span><span style="color:#89DDFF">/</span><span style="color:#EEFFFF">forkable</span><span style="color:#89DDFF">-</span><span style="color:#EEFFFF">library </span><span style="color:#89DDFF">=></span><span style="color:#EEFFFF"> github</span><span style="color:#89DDFF">.</span><span style="color:#EEFFFF">com</span><span style="color:#89DDFF">/</span><span style="color:#EEFFFF">my</span><span style="color:#89DDFF">-</span><span style="color:#EEFFFF">user</span><span style="color:#89DDFF">/</span><span style="color:#EEFFFF">forkable</span><span style="color:#89DDFF">-</span><span style="color:#EEFFFF">library d298b0add2ca</span></span>
+<span class="line"></span></code></pre>
+<p>and let go find the canonical reference to that commit with <code>go mod tidy</code>. After this, you should be able to build this on any build system.</p>
+<h3 id="committing-changes">Committing Changes</h3>
+<p>Now that we know that our changes work, let’s add and commit our changes to the forked library. After that, let’s create a tag so we can easily reference it in our replace directive.</p>
+<p>A reasonable convention is to append <code>-fork</code> to the end of the versions. For example, the library is currently tagged as <code>v1.1.0</code>, and so you can tag your commit as <code>v1.1.0-fork</code> with:</p>
+<pre class="astro-code material-theme" style="background-color:#263238;color:#EEFFFF; overflow-x: auto;" tabindex="0" data-language="sh"><code><span class="line"><span style="color:#FFCB6B">git</span><span style="color:#C3E88D"> tag</span><span style="color:#C3E88D"> v1.1.0-fork</span><span style="color:#89DDFF"> &#x26;&#x26;</span><span style="color:#FFCB6B"> git</span><span style="color:#C3E88D"> push</span><span style="color:#C3E88D"> --tags</span></span>
+<span class="line"></span></code></pre>
+<p>Then, depend on the git repository by updating the replace directive to</p>
+<pre class="astro-code material-theme" style="background-color:#263238;color:#EEFFFF; overflow-x: auto;" tabindex="0" data-language="go"><code><span class="line"><span style="color:#EEFFFF">replace github</span><span style="color:#89DDFF">.</span><span style="color:#EEFFFF">com</span><span style="color:#89DDFF">/</span><span style="color:#EEFFFF">naterarmstrong</span><span style="color:#89DDFF">/</span><span style="color:#EEFFFF">forkable</span><span style="color:#89DDFF">-</span><span style="color:#EEFFFF">library </span><span style="color:#89DDFF">=></span><span style="color:#EEFFFF"> github</span><span style="color:#89DDFF">.</span><span style="color:#EEFFFF">com</span><span style="color:#89DDFF">/</span><span style="color:#EEFFFF">my</span><span style="color:#89DDFF">-</span><span style="color:#EEFFFF">user</span><span style="color:#89DDFF">/</span><span style="color:#EEFFFF">forkable</span><span style="color:#89DDFF">-</span><span style="color:#EEFFFF">library v1</span><span style="color:#89DDFF">.</span><span style="color:#F78C6C">1.0</span><span style="color:#89DDFF">-</span><span style="color:#EEFFFF">fork</span></span>
+<span class="line"></span></code></pre>
+<h2 id="pitfalls">Pitfalls</h2>
+<p>Here are some things that you <em>should not</em> do:</p>
+<blockquote>
+<p>Try to modify the library without a fork</p>
+</blockquote>
+<p>This simply will not work. You will not be able to push that library to the remote repository, and so you won’t be able to depend on the library.</p>
+<blockquote>
+<p>Try to depend on your fork directly</p>
+</blockquote>
+<p>If you try to depend on your fork directly with something like <code>require github.com/my-user/forkable-library v1.1.0</code>, you will run into build errors because the declared name of the module in <code>go.mod</code> does not match the location at which go found the package. Go finds the package at <code>my-user</code>, but the package declares it lives at <code>naterarmstrong</code>.</p>
+<blockquote>
+<p>Try only updating the declared name in <code>go.mod</code></p>
+</blockquote>
+<p>If you try changing the name listed in <code>go.mod</code>, the library will not build due to dependencies in the same repository also referencing the full name.</p>
+<blockquote>
+<p>Update the package name in <code>go.mod</code> and all project files</p>
+</blockquote>
+<p>Although this can seem like the correct approach, you are likely opening yourself up for a world of merge conflicts if you try to keep your fork up to date with the remote. In addition, you will not be able to easily contribute fixes back to the remote.</p>
+<blockquote>
+<p>Try to synthesize your own description of a commit for <code>go.mod</code></p>
+</blockquote>
+<p>If you try to synthesize your own description of a commit for replacement by following the pattern you see in other <code>go.mod</code> files, you may be surprised to see it fail (I was!). Most <code>go.mod</code> dependencies end up being specified either by:</p>
+<ol>
+<li>The version itself, in the case that there is a tag for the commit in question.</li>
+<li>A commit identifier that looks like <code>v0.1.0-20230228162925-9b5d176a7c52</code>. This identifier is made up of three parts:
+<ol>
+<li>The most recent tag in the history of the commit</li>
+<li>The UTC timestamp of the commit, formatted like <code>%Y%m%d%H%M%S</code>.</li>
+<li>The first 12 characters of the commit hash.</li>
+</ol>
+</li>
+</ol>
+<p>Although the plain commit hash is not a valid full identifier, <code>go mod tidy</code> will fix it for you.</p>
+<h2 id="summary">Summary</h2>
+<p>Now you’ve successfully been able to fork a repository with difficult or absent maintainers. This can even be useful in actively maintained libraries in order to depend on your fixes before they go through the full process to become part of the mainline for the library.</p>  </section> <footer class="page__meta"> <p class="page__taxonomy"> <strong> <i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags:  </strong> <span itemprop="keywords"> <a href="/tags/#computer-science" class="page__taxonomy-item" rel="tag"> Computer Science </a> <span class="sep">, </span><a href="/tags/#go" class="page__taxonomy-item" rel="tag"> Go </a>  </span> </p> <p class="page__date"> <strong> <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:
+</strong>  <time datetime="2025-03-25T00:00:00.000Z">March 25, 2025</time> </p> </footer> <nav class="pagination"> <a href="/blog/readable-code-is-guessable/" class="pagination--pager" title="Readable Code is Guessable">
+Previous
+</a> <a href="#" class="pagination--pager disabled">
+Next
+</a> </nav> </div> </article> <div class="page__related"> <h4 class="page__related-title">You May Also Enjoy</h4> <div class="grid__wrapper"> <div class="grid__item"> <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork"> <h2 class="archive__item-title no_toc" itemprop="headline"> <a href="/blog/readable-code-is-guessable/" rel="permalink">Readable Code is Guessable</a> </h2> <p class="page__meta"> <span class="page__meta-readtime"> <i class="far fa-clock" aria-hidden="true"></i> 5 minute read
+</span> </p> <p class="archive__item-excerpt" itemprop="description">A rule of thumb of code quality</p> </article> </div><div class="grid__item"> <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork"> <h2 class="archive__item-title no_toc" itemprop="headline"> <a href="/blog/pick-the-largest-number/" rel="permalink">Guess the Largest Number Paradox</a> </h2> <p class="page__meta"> <span class="page__meta-readtime"> <i class="far fa-clock" aria-hidden="true"></i> 5 minute read
+</span> </p> <p class="archive__item-excerpt" itemprop="description">Many statistical paradoxes boil down to an imprecise problem statement, but this is one paradox that is truly astonishing, where we seem to get information f...</p> </article> </div><div class="grid__item"> <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork"> <h2 class="archive__item-title no_toc" itemprop="headline"> <a href="/blog/floating-point-error-example/" rel="permalink">Floating Point Error Example</a> </h2> <p class="page__meta"> <span class="page__meta-readtime"> <i class="far fa-clock" aria-hidden="true"></i> 7 minute read
+</span> </p> <p class="archive__item-excerpt" itemprop="description">Last post, we talked about how to understand floating point error, but the only example we consider was the trivial case of a + b + c. In this post, we will...</p> </article> </div><div class="grid__item"> <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork"> <h2 class="archive__item-title no_toc" itemprop="headline"> <a href="/blog/understanding-floating-point-error/" rel="permalink">Understanding Floating Point Error</a> </h2> <p class="page__meta"> <span class="page__meta-readtime"> <i class="far fa-clock" aria-hidden="true"></i> 10 minute read
+</span> </p> <p class="archive__item-excerpt" itemprop="description">Floating point is the most commonly used number format for calculations. In this post, I go over the basics of understanding floating point rounding and erro...</p> </article> </div> </div> </div> </div>  </div> <script src="/assets/js/main.min.js"></script> </body> </html>
